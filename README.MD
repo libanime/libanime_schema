@@ -18,13 +18,13 @@ Requirement python 3.10+
 pipx (recommended):
 
 ```shell
-pipx install ssc_gen
+pipx install ssc_codegen
 ```
 
 pip:
 
 ```shell
-pip install ssc_gen
+pip install ssc_codegen
 ```
 
 ## Usage
