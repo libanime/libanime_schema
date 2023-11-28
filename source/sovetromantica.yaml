@@ -1,0 +1,128 @@
+id: sovetromantica
+info:
+  name: sovetromantica
+  author: vypivshiy
+  description: sovetromantica parser
+  source: https://sovetromantica.com
+  tags: any
+
+Ongoing:
+  doc: |
+    Prepare:
+      1. GET https://sovetromantica.com/anime
+  steps:
+    validate: |
+      css "title"
+      text
+      assertMatch "Аниме / SovetRomantica"
+      noRet
+    split: |
+      cssAll ".anime--block__desu"
+    parser:
+      - name: thumbnail
+        run: |
+          css ".anime--poster--loading > img"
+          attr "src"
+      - name: title
+        run: |
+          css ".anime--block__name > span + span"
+          text
+      - name: alt_title
+        run: |
+          css ".anime--block__name > span"
+          text
+      - name: url
+        run: |
+          css ".anime--block__desu a"
+          attr "href"
+
+Search:
+  doc: |
+    Prepare:
+      1. GET https://sovetromantica.com/anime?query=<QUERY>
+  steps:
+    validate: |
+      css "title"
+      text
+      assertMatch "Аниме / SovetRomantica"
+      noRet
+    split: |
+      cssAll ".anime--block__desu"
+    parser:
+      - name: thumbnail
+        run: |
+          css ".anime--poster--loading > img"
+          attr "src"
+      - name: title
+        run: |
+          css ".anime--block__name > span + span"
+          text
+      - name: alt_title
+        run: |
+          css ".anime--block__name > span"
+          text
+      - name: url
+        run: |
+          css ".anime--block__desu a"
+          attr "href"
+
+Anime:
+  doc: |
+    Prepare:
+      1. GET to anime URL page
+  steps:
+    validate: |
+      css "title"
+      text
+      assertMatch "/ SovetRomantica"
+      noRet
+    parser:
+      - name: thumbnail
+        run: |
+          css "#poster"
+          attr "src"
+      - name: title
+        run: |
+          css ".anime-name .block--container"
+          text
+      - name: description
+        run: |
+          css ".block--full anime-description"
+          text
+      - name: video
+        # in main page give first episode video
+        # contains in <meta> tag and maybe does not exist
+        # EG: https://sovetromantica.com/anime/1398-tsundere-akuyaku-reijou-liselotte-to-jikkyou-no-endou-kun-to-kaisetsu-no-kobayashi-san
+        # TODO add null type
+        run: |
+          default ""
+          raw
+          re "content=\"(https://.*\.m3u8)\""
+
+Episode:
+  doc: |
+    WARNING! taget page maybe does not contains video!
+    Prepare:
+      1. GET https://sovetromantica.com/anime?query=<QUERY>
+  steps:
+    validate: |
+      css "title"
+      text
+      assertMatch "/ SovetRomantica"
+      noRet
+    split: |
+      cssAll ".episodes-slick_item"
+    parser:
+      - name: url
+        run: |
+          css "a"
+          attr "href"
+          format "https://sovetromantica.com/anime{{}}"
+      - name: thumbnail
+        run: |
+          css "img"
+          attr "src"
+      - name: title
+        run: |
+          css "img"
+          attr "alt"

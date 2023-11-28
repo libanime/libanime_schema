@@ -1,0 +1,115 @@
+id: animania
+info:
+  name: animania parser
+  author: vypivshiy
+  description: animania parser
+  source: https://animania.online/
+  tags: any
+
+
+Ongoing:
+  doc: |
+    Prepare:
+      1. GET https://animania.online/
+  steps:
+    split: |
+      cssAll ".short-tablet"
+    parser:
+      - name: title
+        run: |
+          css "h5"
+          text
+      - name: thumbnail
+        run: |
+          css "#dle-content .lazy-loaded"
+          attr "src"
+          format "https://animania.online{{}}"
+      - name: url
+        run: |
+          css ".st-poster"
+          attr "href"
+
+Search:
+  doc: |
+    Prepare:
+      1. GET https://animania.online/index.php?story=<QUERY>&do=search&subaction=search
+  steps:
+    split: |
+      cssAll "#short"
+    parser:
+      - name: title
+        run: |
+          css "img"
+          attr "alt"
+      - name: thumbnail
+        run: |
+          css "img"
+          attr "src"
+          format "https://animania.online{{}}"
+      - name: url
+        run: |
+          css "a"
+          attr "href"
+
+Anime:
+  doc: |
+    Prepare:
+      1. GET to anime page
+  steps:
+    parser:
+      - name: title
+        run: |
+          css "h1"
+          text
+      - name: thumbnail
+        run: |
+          css ".fposter img"
+          attr "src"
+          format "https://animania.online{{}}"
+      - name: description
+        run: |
+          css "#fdesc"
+          text
+
+DubbersView:
+  doc: |
+    Prepare:
+      1. GET to anime page
+  steps:
+    split: |
+      cssAll "#ks-translations > span"
+    parser:
+      - name: id
+        run: |
+          // get dubber id
+          // attr signature kodikSlider.season('1', this) 
+          attr "onclick"
+          re "(\d+)"
+      - name: name
+        run: |
+          text
+
+VideoView:
+  doc: |
+    Prepare:
+      1. GET to anime page
+  steps:
+    split: |
+      cssAll "#ks-episodes > li"
+    parser:
+      - name: id
+        run: |
+          // get dubber id
+          // attr signature <li id="season1" ...>
+          attr "id"
+          lStrip "season"
+      - name: names
+        run: |
+          cssAll "span"
+          text
+      - name: urls
+        doc: |
+          URL signature (https: EXCLUDE)
+        run: |
+          raw
+          reAll "'(//.*?)'"

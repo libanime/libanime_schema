@@ -1,0 +1,158 @@
+id: animejoy
+info:
+  name: project name
+  author: username
+  description: | 
+    animejoy.ru parser.
+    
+    NOTE: this source have CLOUDFLARE, sometimes maybe not works
+  source: animejoy.ru
+  tags: any
+
+Ongoing:
+  doc: |
+    Prepare:
+      1. GET https://animejoy.ru
+  steps:
+    validate: |
+      css "title"
+      text
+      assertMatch "AnimeJoy.Ru аниме с субтитрами"
+      noRet
+    split: |
+      cssAll ".shortstory"
+    parser:
+      - name: title
+        run: |
+          css ".ntitle > a"
+          text
+      - name: alt_title
+        run: |
+          css ".romanji"
+          text
+      - name: url
+        run: |
+          css ".ntitle > a"
+          attr "href"
+      - name: thumbnail
+        run: |
+          css ".fr-fil"
+          attr "src"
+          format "https://animejoy.ru{{}}"
+
+Search:
+  doc: |
+    Prepare:
+      1. POST https://animejoy.ru/
+      2. DATA: 
+        story: <QUERY>
+        do: search
+        subaction: search
+  steps:
+    validate: |
+      css "title"
+      text
+      assertMatch "Поиск по сайту"
+      noRet
+    split: |
+        cssAll ".shortstory"
+    parser:
+      - name: title
+        run: |
+          css ".ntitle > a"
+          text
+      - name: alt_title
+        run: |
+          css ".romanji"
+          text
+      - name: url
+        run: |
+          css ".ntitle > a"
+          attr "href"
+      - name: thumbnail
+        run: |
+          css ".fr-fil"
+          attr "src"
+          format "https://animejoy.ru{{}}"
+
+Anime:
+  doc: |
+    Prepare:
+      1. GET to anime page
+  steps:
+    validate: |
+      css "title"
+      text
+      assertMatch "Поиск по сайту"
+      noRet
+    parser:
+      - name: title
+        run: |
+          css ".ntitle > a"
+          text
+      - name: alt_title
+        run: |
+          css ".romanji"
+          text
+      - name: url
+        run: |
+          css ".ntitle > a"
+          attr "href"
+      - name: thumbnail
+        run: |
+          css ".fr-fil"
+          attr "src"
+          format "https://animejoy.ru{{}}"
+      - name: description
+        run: |
+          css ".pcdescrf p"
+          text
+      - name: news_id
+        run: |
+          css "div.playlists-ajax"
+          attr "data-news_id"
+
+PlayerView:
+  doc: |
+    Represent player name and player id
+    Prepare:
+      1. get news_id from Anime
+      2. GET https://animejoy.ru/engine/ajax/playlists.php?news_id={Anime.news_id}&xfield=playlist
+      3. get json, get HTML by "response" key
+      4. OPTIONAL: Unescape document
+  steps:
+    validate: |
+      assertCss ".playlists-player > .playlists-lists ul > li"
+      noRet
+    split: |
+      cssAll ".playlists-player > .playlists-lists ul > li"
+    parser:
+      - name: id
+        run: |
+          attr "data-id"
+      - name: name
+        run: |
+          text
+
+PlayerUrls:
+  doc: |
+    Represent player url and player id
+    
+    Prepare:
+      1. get news_id from Anime
+      2. GET https://animejoy.ru/engine/ajax/playlists.php?news_id={Anime.news_id}&xfield=playlist
+      3. get json, get HTML by "response" key
+      4. OPTIONAL: Unescape document
+  steps:
+    validate: |
+      assertCss ".playlists-videos > .playlists-items ul > li"
+      noRet
+    split: |
+      cssAll ".playlists-videos > .playlists-items ul > li"
+    parser:
+      - name: id
+        run: |
+          attr "data-id"
+      - name: url
+        run: |
+          attr "data-file"
