@@ -4,26 +4,26 @@ YAML + DSL-language [ssc_gen](https://github.com/vypivshiy/selector_schema_codeg
 
 > These schemas just provide extractor logic
 
-## languages support
-| language | libraries      | xpath support | css support | formatter dependency |
+## Languages support
+| language | html library   | xpath support | css support | formatter dependency |
 |----------|----------------|---------------|-------------|----------------------|
 | python   | bs4            | NO            | YES         | black                |
 | python   | parsel         | YES           | YES         | black                |
 | dart     | universal_html | NO            | YES         | dart format          |
 
-## install
+## Install
 
-requirement python 3.10+
+Requirement python 3.10+
 
 ```shell
 pip install ssc_gen
 ```
 
-## usage
+## Usage
 ```
 ssc_gen <scema_name>.yaml <language> -o <output>
 ```
-### example
+### Example
 
 ```shell
 # python
@@ -35,7 +35,14 @@ ssc_gen animego.yaml python.parsel -o animego.py
 ssc_gen animego.yaml dart -o animego.dart
 ```
 
-### generated classes usage
+## Generated classes usage
+
+pseudo-code
+```
+document = client.get(URL)
+cls = SomeSchema(document).parse() // parse document
+cls.view() // extract value
+```
 
 ```dart
 import 'animego.dart';
