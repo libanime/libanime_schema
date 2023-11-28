@@ -1,0 +1,210 @@
+# meta information
+id: animego
+info:
+  name: animego
+  author: vypivshiy
+  description: |
+    animego schema extractors
+    headers required:
+      "x-requested-with": "XMLHttpRequest
+      "User-Agent": ...
+  source: https://animego.org
+  tags: anime, parser
+
+Ongoing:
+  doc: |
+    Get all available ongoings from main page
+    Prepare:
+      1. GET https://animego.org
+  steps:
+    validate: |
+      css "title"
+      text
+      assertMatch "Смотреть Аниме онлайн"
+      noRet
+    split: |
+      cssAll ".border-bottom-0.cursor-pointer"
+    parser:
+      - name: url
+        doc: ongoing page
+        run: |
+          attr "onclick"
+          lstrip "location.href="
+          strip "'"
+          format "https://animego.org{{}}"
+
+      - name: title
+        doc: ongoing name
+        run: |
+          css ".last-update-title"
+          text
+      - name: thumbnail
+        doc: ongoing thumbnail image
+        run: |
+          css ".lazy"
+          attr "style"
+          lstrip "background-image: url("
+          rstrip ");"
+
+      - name: episode
+        doc: episode num
+        run: |
+          css ".text-truncate"
+          text
+          re "(\d+)\s"
+      - name: dub
+        doc: dubber name
+        run: |
+          css ".text-gray-dark-6"
+          text
+
+Search:
+  doc: |
+    Get all search results by query
+    Prepare:
+      1. GET to https://animego.org/search/anime?q={QUERY}
+  steps:
+    split: |
+      cssAll ".row > .col-ul-2"
+    parser:
+      - name: title
+        doc: title name
+        run: |
+          css ".text-truncate a"
+          attr "title"
+      - name: thumbnail
+        doc: thumbnail image
+        run: |
+          css ".lazy"
+          attr "data-original"
+      - name: url
+        doc: anime page link
+        run: |
+          css ".text-truncate a"
+          attr "href"
+
+Anime:
+  doc: |
+    Anime page information
+    Prepare:
+      1. GET to anime page EG: https://animego.org/anime/eksperimenty-leyn-1114
+  steps:
+    validate: |
+      css "title"
+      text
+      assertMatch ".* смотреть онлайн .*"
+      noRet
+    parser:
+      - name: title
+        doc: anime title
+        run: |
+          css ".anime-title h1"
+          text
+      - name: description
+        doc: anime description
+        run: |
+          cssAll ".description"
+          text
+          join " "
+      - name: thumbnail
+        run: |
+          css "#content img"
+          attr "src"
+      - name: id
+        doc: anime id required for next requests (for DubberView, Source schemas)
+        run: |
+          css ".br-2 .my-list-anime"
+          attr "id"
+          lstrip "my-list-"
+      - name: raw_json
+        doc: for parse extra metadata
+        run: |
+          // useful for parse extra metadata
+          css "script[type='application/ld+json']"
+          text
+
+DubbersView:
+  doc: |
+    Representation dubbers in {id: 'dubber_id', name: 'dubber_name'}
+    
+    Prepare:
+      1. get id from Anime object
+      2. GET 'https://animego.org/anime/{Anime.id}/player?_allow=true'
+      3. extract html from json by ['content'] key 
+      4. OPTIONAL: unescape HTML
+  steps:
+    validate: |
+      assertCss "#video-dubbing .mb-1"
+      noRet
+    split: |
+      cssAll "#video-dubbing .mb-1"
+    parser:
+      - name: id
+        doc: dubber_id
+        run: |
+          attr "data-dubbing"
+      - name: name
+        doc: dubber name
+        run: |
+          css "span"
+          text
+          strip "\n"
+          strip " "
+
+Episode:
+  doc: |
+    Representation episodes
+    
+    Prepare:
+      1. get id from Anime object
+      2. GET 'https://animego.org/anime/{Anime.id}/player?_allow=true'
+      3. extract html from json by ['content'] key
+      4. OPTIONAL: unescape HTML
+  steps:
+    validate: |
+      assertCss "#video-carousel .mb-0"
+      noRet
+    split: |
+      cssAll "#video-carousel .mb-0"
+    parser:
+      - name: num
+        doc: episode number
+        run: |
+          attr "data-episode"
+      - name: title
+        doc: episode name
+        run: |
+          attr "data-episode-title"
+      - name: id
+        doc: episode id REQUIRED for extract video
+        run: |
+          attr "data-id"
+
+Source:
+  doc: |
+    representation videos
+    
+    Prepare:
+      1. get num and id from Episode
+      2. GET https://animego.org/anime/series with  params 
+        {"dubbing": 2, "provider": 24, "episode": Episode.num, "id": Episode.id}
+      2. extract html from json by ["content"] key
+      3. OPTIONAL: unescape
+  steps:
+    split: |
+      cssAll "#video-players > span"
+    parser:
+      - name: title
+        doc: video name
+        run: |
+          text
+      - name: url
+        run: |
+          attr "data-player"
+          format "https:{{}}"
+      - name: data_provider
+        run: |
+          attr "data-provider"
+      - name: data_provide_dubbing
+        run: |
+          attr "data-provide-dubbing"
