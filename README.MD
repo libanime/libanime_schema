@@ -15,6 +15,14 @@ YAML + DSL-language [ssc_gen](https://github.com/vypivshiy/selector_schema_codeg
 
 Requirement python 3.10+
 
+pipx (recommended):
+
+```shell
+pipx install ssc_gen
+```
+
+pip:
+
 ```shell
 pip install ssc_gen
 ```
@@ -41,7 +49,7 @@ pseudo-code
 ```
 document = client.get(URL)
 cls = SomeSchema(document).parse() // parse document
-cls.view() // extract value
+cls.view() // extract values
 ```
 
 ```dart
