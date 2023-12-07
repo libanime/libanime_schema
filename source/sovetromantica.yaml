@@ -6,7 +6,7 @@ info:
   source: https://sovetromantica.com
   tags: any
 
-Ongoing:
+OngoingView:
   doc: |
     Prepare:
       1. GET https://sovetromantica.com/anime
@@ -36,7 +36,7 @@ Ongoing:
           css ".anime--block__desu a"
           attr "href"
 
-Search:
+SearchView:
   doc: |
     Prepare:
       1. GET https://sovetromantica.com/anime?query=<QUERY>
@@ -44,7 +44,8 @@ Search:
     validate: |
       css "title"
       text
-      assertMatch "Аниме / SovetRomantica"
+      // maybe redirect to title and skip search page
+      assertMatch "\w+ / SovetRomantica"
       noRet
     split: |
       cssAll ".anime--block__desu"
@@ -66,7 +67,7 @@ Search:
           css ".anime--block__desu a"
           attr "href"
 
-Anime:
+AnimeView:
   doc: |
     Prepare:
       1. GET to anime URL page
@@ -81,13 +82,14 @@ Anime:
         run: |
           css "#poster"
           attr "src"
+          format "https://sovetromantica.com{{}}"
       - name: title
         run: |
           css ".anime-name .block--container"
           text
       - name: description
         run: |
-          css ".block--full anime-description"
+          css ".block--full .anime-description"
           text
       - name: video
         # in main page give first episode video
@@ -97,13 +99,13 @@ Anime:
         run: |
           default ""
           raw
-          re "content=\"(https://.*\.m3u8)\""
+          re "<meta property=\".*\" content=\"(https://.*?\.m3u8)\""
 
-Episode:
+EpisodeView:
   doc: |
-    WARNING! taget page maybe does not contains video!
+    WARNING! target page maybe does not contains video!
     Prepare:
-      1. GET https://sovetromantica.com/anime?query=<QUERY>
+      1. GET to anime page
   steps:
     validate: |
       css "title"
@@ -117,11 +119,12 @@ Episode:
         run: |
           css "a"
           attr "href"
-          format "https://sovetromantica.com/anime{{}}"
+          format "https://sovetromantica.com{{}}"
       - name: thumbnail
         run: |
           css "img"
           attr "src"
+          format "https://sovetromantica.com{{}}"
       - name: title
         run: |
           css "img"

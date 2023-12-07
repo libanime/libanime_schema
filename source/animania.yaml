@@ -7,7 +7,7 @@ info:
   tags: any
 
 
-Ongoing:
+OngoingView:
   doc: |
     Prepare:
       1. GET https://animania.online/
@@ -16,20 +16,23 @@ Ongoing:
       cssAll ".short-tablet"
     parser:
       - name: title
+        doc: title name
         run: |
           css "h5"
           text
       - name: thumbnail
+        doc: thumbnail image
         run: |
-          css "#dle-content .lazy-loaded"
-          attr "src"
+          css "img"
+          attr "data-src"
           format "https://animania.online{{}}"
       - name: url
+        doc: url entrypoint to anime page
         run: |
           css ".st-poster"
           attr "href"
 
-Search:
+SearchView:
   doc: |
     Prepare:
       1. GET https://animania.online/index.php?story=<QUERY>&do=search&subaction=search
@@ -38,35 +41,41 @@ Search:
       cssAll "#short"
     parser:
       - name: title
+        doc: title name
         run: |
           css "img"
           attr "alt"
       - name: thumbnail
+        doc: thumbnail image
         run: |
           css "img"
           attr "src"
           format "https://animania.online{{}}"
       - name: url
+        doc: url entrypoint to anime page
         run: |
           css "a"
           attr "href"
 
-Anime:
+AnimeView:
   doc: |
     Prepare:
       1. GET to anime page
   steps:
     parser:
       - name: title
+        doc: title name
         run: |
           css "h1"
           text
       - name: thumbnail
+        doc: thumbnail image
         run: |
           css ".fposter img"
-          attr "src"
+          attr "data-src"
           format "https://animania.online{{}}"
       - name: description
+        doc: anime description
         run: |
           css "#fdesc"
           text
@@ -80,12 +89,14 @@ DubbersView:
       cssAll "#ks-translations > span"
     parser:
       - name: id
+        doc: dubber id
         run: |
           // get dubber id
           // attr signature kodikSlider.season('1', this) 
           attr "onclick"
           re "(\d+)"
       - name: name
+        doc: dubber name
         run: |
           text
 
@@ -98,18 +109,20 @@ VideoView:
       cssAll "#ks-episodes > li"
     parser:
       - name: id
+        doc: dubber id (for relationship with DubbersView)
         run: |
           // get dubber id
           // attr signature <li id="season1" ...>
           attr "id"
           lStrip "season"
       - name: names
+        doc: episode names
         run: |
           cssAll "span"
           text
       - name: urls
         doc: |
-          URL signature (https: EXCLUDE)
+          episode urls to player WARNING: `https:` prefix EXCLUDE!!!
         run: |
           raw
           reAll "'(//.*?)'"

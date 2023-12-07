@@ -11,7 +11,7 @@ info:
   source: https://animego.org
   tags: anime, parser
 
-Ongoing:
+OngoingView:
   doc: |
     Get all available ongoings from main page
     Prepare:
@@ -26,7 +26,7 @@ Ongoing:
       cssAll ".border-bottom-0.cursor-pointer"
     parser:
       - name: url
-        doc: ongoing page
+        doc: anime page
         run: |
           attr "onclick"
           lstrip "location.href="
@@ -58,7 +58,7 @@ Ongoing:
           css ".text-gray-dark-6"
           text
 
-Search:
+SearchView:
   doc: |
     Get all search results by query
     Prepare:
@@ -83,7 +83,7 @@ Search:
           css ".text-truncate a"
           attr "href"
 
-Anime:
+AnimeView:
   doc: |
     Anime page information
     Prepare:
@@ -151,7 +151,7 @@ DubbersView:
           strip "\n"
           strip " "
 
-Episode:
+EpisodeView:
   doc: |
     Representation episodes
     
@@ -180,7 +180,7 @@ Episode:
         run: |
           attr "data-id"
 
-Source:
+SourceView:
   doc: |
     representation videos
     

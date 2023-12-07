@@ -5,11 +5,12 @@ info:
   description: | 
     animejoy.ru parser.
     
-    NOTE: this source have CLOUDFLARE, sometimes maybe not works
+    NOTE: this source have CLOUDFLARE sometimes maybe not works
+      Usually adding a delay helps
   source: animejoy.ru
   tags: any
 
-Ongoing:
+OngoingView:
   doc: |
     Prepare:
       1. GET https://animejoy.ru
@@ -23,28 +24,32 @@ Ongoing:
       cssAll ".shortstory"
     parser:
       - name: title
+        doc: title name
         run: |
           css ".ntitle > a"
           text
       - name: alt_title
+        doc: alternative name
         run: |
           css ".romanji"
           text
       - name: url
+        doc: url to anime page
         run: |
           css ".ntitle > a"
           attr "href"
       - name: thumbnail
+        doc: thumbnail image
         run: |
           css ".fr-fil"
           attr "src"
           format "https://animejoy.ru{{}}"
 
-Search:
+SearchView:
   doc: |
     Prepare:
       1. POST https://animejoy.ru/
-      2. DATA: 
+      data payload: 
         story: <QUERY>
         do: search
         subaction: search
@@ -58,14 +63,17 @@ Search:
         cssAll ".shortstory"
     parser:
       - name: title
+        doc: title name
         run: |
           css ".ntitle > a"
           text
       - name: alt_title
+        doc: alternative title name
         run: |
           css ".romanji"
           text
       - name: url
+        doc: anime url page
         run: |
           css ".ntitle > a"
           attr "href"
@@ -75,39 +83,40 @@ Search:
           attr "src"
           format "https://animejoy.ru{{}}"
 
-Anime:
+AnimeView:
   doc: |
     Prepare:
       1. GET to anime page
   steps:
     validate: |
-      css "title"
-      text
-      assertMatch "Поиск по сайту"
+      css ".logotype > img"
+      attr "src"
+      assertMatch "AnimeJoy"
       noRet
     parser:
       - name: title
+        doc: title name
         run: |
-          css ".ntitle > a"
+          css ".ntitle"
           text
       - name: alt_title
+        doc: alternative title name
         run: |
           css ".romanji"
           text
-      - name: url
-        run: |
-          css ".ntitle > a"
-          attr "href"
       - name: thumbnail
+        doc: thumbnail image
         run: |
           css ".fr-fil"
           attr "src"
           format "https://animejoy.ru{{}}"
       - name: description
+        doc: anime description
         run: |
           css ".pcdescrf p"
           text
       - name: news_id
+        doc: anime id for payload requests (PlayerView, PlayerUrlsView)
         run: |
           css "div.playlists-ajax"
           attr "data-news_id"
@@ -118,7 +127,7 @@ PlayerView:
     Prepare:
       1. get news_id from Anime
       2. GET https://animejoy.ru/engine/ajax/playlists.php?news_id={Anime.news_id}&xfield=playlist
-      3. get json, get HTML by "response" key
+      3. deserialize json, get HTML by "response" key
       4. OPTIONAL: Unescape document
   steps:
     validate: |
@@ -128,13 +137,15 @@ PlayerView:
       cssAll ".playlists-player > .playlists-lists ul > li"
     parser:
       - name: id
+        doc: player id
         run: |
           attr "data-id"
       - name: name
+        doc: player name
         run: |
           text
 
-PlayerUrls:
+PlayerUrlsView:
   doc: |
     Represent player url and player id
     
@@ -151,8 +162,11 @@ PlayerUrls:
       cssAll ".playlists-videos > .playlists-items ul > li"
     parser:
       - name: id
+        doc: player id
         run: |
           attr "data-id"
       - name: url
+        doc: |
+          player url. WARNING! maybe `https:` prefix exclude!
         run: |
           attr "data-file"
