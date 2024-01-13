@@ -92,7 +92,9 @@ AnimeView:
     validate: |
       css "title"
       text
-      assertMatch ".* смотреть онлайн .*"
+      // Буттигири?! — Аниме
+      // Нежеланно бессмертный авантюрист смотреть онлайн — Аниме
+      assertMatch ".*?\s(—\s\w+:?)"
       noRet
     parser:
       - name: title
