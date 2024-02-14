@@ -1,0 +1,161 @@
+from typing import Optional, Sequence
+
+from ssc_codegen import Document, DictSchema, ListSchema, ItemSchema, assert_
+
+
+__all__ = ["OngoingView", "SearchView", "AnimeView", "DubbersView", "EpisodeView", "SourceView"]
+
+class OngoingView(ListSchema):
+    """Get all available ongoings from main page
+
+    Prepare:
+      1. GET https://animego.org
+    """
+
+    def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
+        doc.css('title').text()
+        return assert_.re(doc, "Смотреть Аниме онлайн")
+
+    def __split_document_entrypoint__(self, doc: Document) -> Document:
+        return doc.css_all(".border-bottom-0.cursor-pointer")
+
+    def url(self, doc: Document):
+        """ongoing page"""
+        return (doc.attr("onclick").lstrip("location.href=")
+                .strip("'").format("https://animego.org{{}}"))
+
+    def title(self, doc: Document):
+        return doc.css(".last-update-title").text()
+
+    def thumbnail(self, doc: Document):
+        return doc.css('.lazy').attr('style').lstrip("background-image: url(").rstrip(");")
+
+    def episode(self, doc: Document):
+        return doc.css(".text-truncate").text().re("(\d+)\s")
+
+    def dub(self, doc: Document):
+        return doc.css(".text-gray-dark-6").text()
+
+
+class SearchView(ListSchema):
+    """ Get all search results by query
+
+    Prepare:
+      1. GET to https://animego.org/search/anime?q={QUERY}"""
+
+    def __split_document_entrypoint__(self, doc: Document) -> Document:
+        return doc.css_all(".row > .col-ul-2")
+
+    def title(self, doc: Document):
+        return doc.css(".text-truncate a").attr('title')
+
+    def thumbnail(self, doc: Document):
+        return doc.css('.lazy').attr('data-original')
+
+    def url(self, doc: Document):
+        return doc.css(".text-truncate a").attr('href')
+
+
+class AnimeView(ItemSchema):
+    """Anime page information
+
+    Prepare:
+      1. GET to anime page EG: https://animego.org/anime/eksperimenty-leyn-1114"""
+
+    def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
+        return assert_.re(doc.css('title').text(), ".* смотреть онлайн .*")
+
+    def title(self, doc: Document):
+        return doc.css(".anime-title h1").text()
+
+    def description(self, doc: Document):
+        return doc.css_all(".description").text().join(" ")
+
+    def thumbnail(self, doc: Document):
+        return doc.css("#content img").attr('src')
+
+    def id(self, doc: Document):
+        """anime id required for next requests (for DubberView, Source schemas)"""
+        return doc.css(".br-2 .my-list-anime").attr('id').lstrip("my-list-")
+
+    def raw_json(self, doc: Document):
+        """DEV key: for parse extra metadata"""
+        return doc.css("script[type='application/ld+json']").text()
+
+
+class DubbersView(DictSchema):
+    """Representation dubbers in {id: 'dubber_id', name: 'dubber_name'}
+
+    Prepare:
+      1. get id from Anime object
+      2. GET 'https://animego.org/anime/{Anime.id}/player?_allow=true'
+      3. extract html from json by ['content'] key
+      4. OPTIONAL: unescape HTML"""
+
+    def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
+        return assert_.css(doc, "#video-dubbing .mb-1")
+
+    def __split_document_entrypoint__(self, doc: Document) -> Sequence[Document]:
+        return doc.css_all("#video-dubbing .mb-1")
+
+    def key(self, doc: Document) -> Document:
+        """dubber id"""
+        return doc.attr("data-dubbing")
+
+    def value(self, doc: Document) -> Document:
+        return doc.css('span').text().strip('\n').strip(" ")
+
+
+class EpisodeView(ListSchema):
+    """Representation episodes
+
+    Prepare:
+      1. get id from Anime object
+      2. GET 'https://animego.org/anime/{Anime.id}/player?_allow=true'
+      3. extract html from json by ['content'] key
+      4. OPTIONAL: unescape HTML
+      """
+
+    def __split_document_entrypoint__(self, doc: Document) -> Document:
+        return doc.css_all("#video-carousel .mb-0")
+
+    def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
+        return assert_.css(doc, "#video-carousel .mb-0")
+
+    def num(self, doc: Document):
+        return doc.attr("data-episode")
+
+    def title(self, doc: Document):
+        return doc.attr("data-episode-title")
+
+    def id(self, doc: Document):
+        return doc.attr("data-id")
+
+
+class SourceView(ListSchema):
+    """representation videos
+
+    Prepare:
+      1. get num and id from Episode
+      2. GET https://animego.org/anime/series with  params
+        {"dubbing": 2, "provider": 24, "episode": Episode.num, "id": Episode.id}
+      2. extract html from json by ["content"] key
+      3. OPTIONAL: unescape
+      """
+
+    def __split_document_entrypoint__(self, doc: Document) -> Document:
+        return doc.css_all("#video-players > span")
+
+    def title(self, doc: Document):
+        return doc.text()
+
+    def url(self, doc: Document):
+        return doc.attr("data-player").format("https:{{}}")
+
+    def data_provider(self, doc: Document):
+        """player id"""
+        return doc.attr("data-provider")
+
+    def data_provide_dubbing(self, doc: Document):
+        """dubber id"""
+        return doc.attr("data-provide-dubbing")
