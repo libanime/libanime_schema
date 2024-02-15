@@ -12,6 +12,7 @@ class OngoingView(ListSchema):
 
       1. GET https://animania.online/
     """
+
     def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
         pass
 
@@ -25,7 +26,11 @@ class OngoingView(ListSchema):
         return doc.css("h5").text()
 
     def thumbnail(self, doc: Document):
-        return doc.css("#dle-content .lazy-loaded").attr("src").format("https://animania.online{{}}")
+        return (
+            doc.css("#dle-content .lazy-loaded")
+            .attr("src")
+            .format("https://animania.online{{}}")
+        )
 
 
 class SearchView(ListSchema):
@@ -34,6 +39,7 @@ class SearchView(ListSchema):
 
       1. GET https://animania.online/index.php?story=<QUERY>&do=search&subaction=search
     """
+
     def __split_document_entrypoint__(self, doc: Document) -> Document:
         return doc.css_all("#short")
 
@@ -53,6 +59,7 @@ class AnimeView(ItemSchema):
 
       1. GET to anime page
     """
+
     def title(self, doc: Document):
         return doc.css("h1").text()
 
@@ -60,7 +67,11 @@ class AnimeView(ItemSchema):
         return doc.css("#fdesc").text()
 
     def thumbnail(self, doc: Document):
-        return doc.css(".fposter img").attr("src").format("https://animania.online{{}}")
+        return (
+            doc.css(".fposter img")
+            .attr("data-src")
+            .format("https://animania.online{{}}")
+        )
 
 
 class DubbersView(DictSchema):
@@ -91,6 +102,7 @@ class VideoView(ListSchema):
       1. GET to anime page
 
     """
+
     def __split_document_entrypoint__(self, doc: Document) -> Sequence[Document]:
         return doc.css_all("#ks-episodes > li")
 
