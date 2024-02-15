@@ -2,7 +2,7 @@ from typing import Optional, Sequence
 
 from ssc_codegen import Document, DictSchema, ListSchema, ItemSchema, assert_
 
-
+# NOTE: this source have CLOUDFLARE, sometimes maybe not works
 __all__ = ["OngoingView", "SearchView", "AnimeView", "PlayerView", "PlayerUrls"]
 
 
@@ -11,6 +11,7 @@ class OngoingView(ListSchema):
     Prepare:
       1. GET https://animejoy.ru
     """
+
     def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
         return assert_.re(doc.css("title").text(), "AnimeJoy.Ru аниме с субтитрами")
 
@@ -39,6 +40,7 @@ class SearchView(ListSchema):
       2. payload:
         story: <QUERY>, do: search, subaction: search
     """
+
     def __split_document_entrypoint__(self, doc: Document) -> Document:
         return doc.css_all(".shortstory")
 
@@ -63,6 +65,7 @@ class AnimeView(ItemSchema):
     Prepare:
       1. GET anime page
     """
+
     def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
         return assert_.re(doc.css("title").text(), "Поиск по сайту")
 
@@ -97,7 +100,8 @@ class PlayerView(DictSchema):
       3. get json, get HTML by "response" key
 
       4. OPTIONAL: Unescape document
-      """
+    """
+
     def __split_document_entrypoint__(self, doc: Document) -> Sequence[Document]:
         return doc.css_all(".playlists-player > .playlists-lists ul > li")
 
@@ -120,6 +124,7 @@ class PlayerUrls(DictSchema):
       3. get json, get HTML by "response" key
       4. OPTIONAL: Unescape document
     """
+
     def __split_document_entrypoint__(self, doc: Document) -> Sequence[Document]:
         return doc.css_all(".playlists-videos > .playlists-items ul > li")
 

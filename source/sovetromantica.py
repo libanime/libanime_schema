@@ -8,12 +8,12 @@ __all__ = ["OngoingView", "SearchView", "AnimeView", "EpisodeView"]
 
 class OngoingView(ListSchema):
     """
-     Prepare:
-      1. GET https://sovetromantica.com/anime
+    Prepare:
+     1. GET https://sovetromantica.com/anime
     """
 
     def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
-        return assert_.re(doc.css('title').text(), "Аниме / SovetRomantica")
+        return assert_.re(doc.css("title").text(), "Аниме / SovetRomantica")
 
     def __split_document_entrypoint__(self, doc: Document) -> Document:
         return doc.css_all(".anime--block__desu")
@@ -34,10 +34,12 @@ class OngoingView(ListSchema):
 
 
 class SearchView(ListSchema):
-    """ Get all search results by query
+    """Get all search results by query
 
     Prepare:
+
       1. GET https://sovetromantica.com/anime?query=<QUERY>"""
+
     def __split_document_entrypoint__(self, doc: Document) -> Document:
         return doc.css_all(".anime--block__desu")
 
@@ -49,13 +51,13 @@ class SearchView(ListSchema):
         return doc.css(".anime--block__name > span + span").text()
 
     def thumbnail(self, doc: Document):
-        return doc.css(".anime--poster--loading > img").attr('src')
+        return doc.css(".anime--poster--loading > img").attr("src")
 
     def alt_title(self, doc: Document):
         return doc.css(".anime--block__name > span").text()
 
     def url(self, doc: Document):
-        return doc.css(".anime--block__desu a").attr('href')
+        return doc.css(".anime--block__desu a").attr("href")
 
 
 class AnimeView(ItemSchema):
@@ -63,9 +65,11 @@ class AnimeView(ItemSchema):
     """Anime page information
 
     Prepare:
+
       1. GET to anime URL page"""
+
     def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
-        return assert_.re(doc.css('title').text(), "/ SovetRomantica")
+        return assert_.re(doc.css("title").text(), "/ SovetRomantica")
 
     def title(self, doc: Document):
         return doc.css(".anime-name .block--container").text()
@@ -74,7 +78,7 @@ class AnimeView(ItemSchema):
         return doc.css(".block--full anime-description").text()
 
     def thumbnail(self, doc: Document):
-        return doc.css("#poster").attr('src')
+        return doc.css("#poster").attr("src")
 
     def video(self, doc: Document):
         """WARNING!
@@ -86,23 +90,24 @@ class AnimeView(ItemSchema):
           https://sovetromantica.com/anime/1398-tsundere-akuyaku-reijou-liselotte-to-jikkyou-no-endou-kun-to-kaisetsu-no-kobayashi-san
         """
         with doc.default(None):
-            return doc.raw().re(r'content=\"(https://.*\.m3u8)\"')
+            return doc.raw().re(r"content=\"(https://.*\.m3u8)\"")
 
 
 class EpisodeView(ListSchema):
-    """ WARNING!
+    """WARNING!
 
     target page maybe does not contain video!
 
     Prepare:
+
       1. GET https://sovetromantica.com/anime?query=<QUERY>
-      """
+    """
 
     def __split_document_entrypoint__(self, doc: Document) -> Document:
         return doc.css_all(".episodes-slick_item")
 
     def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
-        return assert_.re(doc.css('title').text(), "/ SovetRomantica")
+        return assert_.re(doc.css("title").text(), "/ SovetRomantica")
 
     def url(self, doc: Document):
         return doc.css("a").attr("href").format("https://sovetromantica.com/anime{{}}")

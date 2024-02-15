@@ -46,7 +46,6 @@ class AnimeView(ItemSchema):
 
 
 class DubbersView(DictSchema):
-
     def __split_document_entrypoint__(self, doc: Document) -> Sequence[Document]:
         pass
 
