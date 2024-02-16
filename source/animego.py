@@ -47,7 +47,7 @@ class OngoingView(ListSchema):
         return doc.css(".text-truncate").text().re("(\d+)\s")
 
     def dub(self, doc: Document):
-        return doc.css(".text-gray-dark-6").text()
+        return doc.css(".text-gray-dark-6").text().replace(")", "").replace("(", "")
 
 
 class SearchView(ListSchema):
@@ -116,7 +116,7 @@ class DubbersView(DictSchema):
         return doc.attr("data-dubbing")
 
     def value(self, doc: Document) -> Document:
-        return doc.css("span").text().strip("\n").strip(" ")
+        return doc.css("span").text().strip("\n").strip(" ").rstrip('\n')
 
 
 class EpisodeView(ListSchema):

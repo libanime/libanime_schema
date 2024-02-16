@@ -27,8 +27,8 @@ class OngoingView(ListSchema):
 
     def thumbnail(self, doc: Document):
         return (
-            doc.css("#dle-content .lazy-loaded")
-            .attr("src")
+            doc.css("img")
+            .attr("data-src")
             .format("https://animania.online{{}}")
         )
 

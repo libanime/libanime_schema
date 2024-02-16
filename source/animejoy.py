@@ -3,7 +3,7 @@ from typing import Optional, Sequence
 from ssc_codegen import Document, DictSchema, ListSchema, ItemSchema, assert_
 
 # NOTE: this source have CLOUDFLARE, sometimes maybe not works
-__all__ = ["OngoingView", "SearchView", "AnimeView", "PlayerView", "PlayerUrls"]
+__all__ = ["OngoingView", "SearchView", "AnimeView", "PlayerView", "PlayerUrlsView"]
 
 
 class OngoingView(ListSchema):
@@ -67,19 +67,16 @@ class AnimeView(ItemSchema):
     """
 
     def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
-        return assert_.re(doc.css("title").text(), "Поиск по сайту")
+        return assert_.re(doc.css("title").text(), "субтитры")
 
     def title(self, doc: Document):
-        return doc.css(".ntitle > a").text()
+        return doc.css(".ntitle").text()
 
     def alt_title(self, doc: Document):
         return doc.css(".romanji").text()
 
-    def url(self, doc: Document):
-        return doc.css(".ntitle > a").attr("href")
-
     def description(self, doc: Document):
-        return doc.css(".pcdescrf p").text()
+        return doc.css_all(".pcdescrf p").text().join(" ").lstrip('Описание:').lstrip(' ')
 
     def thumbnail(self, doc: Document):
         return doc.css(".fr-fil").attr("src").format("https://animejoy.ru{{}}")
@@ -115,7 +112,7 @@ class PlayerView(DictSchema):
         return doc.text()
 
 
-class PlayerUrls(DictSchema):
+class PlayerUrlsView(ListSchema):
     """Represent player url and player id
 
     Prepare:
@@ -131,8 +128,10 @@ class PlayerUrls(DictSchema):
     def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
         return assert_.css(doc, ".playlists-videos > .playlists-items ul > li")
 
-    def key(self, doc: Document) -> Document:
+    def player_id(self, doc: Document) -> Document:
+        """player id"""
         return doc.attr("data-id")
 
-    def value(self, doc: Document) -> Document:
+    def url(self, doc: Document) -> Document:
+        """player url"""
         return doc.attr("data-file")

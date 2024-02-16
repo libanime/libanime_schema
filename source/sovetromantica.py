@@ -75,10 +75,11 @@ class AnimeView(ItemSchema):
         return doc.css(".anime-name .block--container").text()
 
     def description(self, doc: Document):
-        return doc.css(".block--full anime-description").text()
+        with doc.default(''):
+            return doc.css("#js-description_open-full").text()
 
     def thumbnail(self, doc: Document):
-        return doc.css("#poster").attr("src")
+        return doc.css("#poster").attr("src").format("https://sovetromantica.com{{}}")
 
     def video(self, doc: Document):
         """WARNING!
@@ -89,8 +90,11 @@ class AnimeView(ItemSchema):
 
           https://sovetromantica.com/anime/1398-tsundere-akuyaku-reijou-liselotte-to-jikkyou-no-endou-kun-to-kaisetsu-no-kobayashi-san
         """
+        # video signature:
+        # var config={  "id":"sovetromantica_player",
+        # "file":[ { "title":"123", "file":"https://.../subtitles/episode_1/episode_1.m3u8" } ,
         with doc.default(None):
-            return doc.raw().re(r"content=\"(https://.*\.m3u8)\"")
+            return doc.raw().re(r'"file":"([^>]+\.m3u8)"\s*}')
 
 
 class EpisodeView(ListSchema):
@@ -110,7 +114,7 @@ class EpisodeView(ListSchema):
         return assert_.re(doc.css("title").text(), "/ SovetRomantica")
 
     def url(self, doc: Document):
-        return doc.css("a").attr("href").format("https://sovetromantica.com/anime{{}}")
+        return doc.css("a").attr("href").format("https://sovetromantica.com{{}}")
 
     def thumbnail(self, doc: Document):
         return doc.css("img").attr("src")
