@@ -7,10 +7,9 @@ __all__ = ["AnimeView", "OngoingView", "VideoView", "SearchView", "DubbersView"]
 
 
 class OngoingView(ListSchema):
-    """
-    Prepare:
+    """Send to main page request
 
-      1. GET https://animania.online/
+    GET https://animania.online/
     """
 
     def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
@@ -34,10 +33,10 @@ class OngoingView(ListSchema):
 
 
 class SearchView(ListSchema):
-    """
-    Prepare:
+    """Send search request
 
-      1. GET https://animania.online/index.php?story=<QUERY>&do=search&subaction=search
+    GET https://animania.online/index.php
+    story={QUERY}&do=search&subaction=search
     """
 
     def __split_document_entrypoint__(self, doc: Document) -> Document:
@@ -54,10 +53,9 @@ class SearchView(ListSchema):
 
 
 class AnimeView(ItemSchema):
-    """
-    Prepare:
+    """send request to anime page
 
-      1. GET to anime page
+    GET https://animania.online/9403-jeksperimenty-ljejn-serial-experiments-lain-1998-smotret-onlajn.html
     """
 
     def title(self, doc: Document):
@@ -75,10 +73,9 @@ class AnimeView(ItemSchema):
 
 
 class DubbersView(DictSchema):
-    """
-    Prepare:
+    """send to anime page request
 
-      1. GET to anime page
+    GET https://animania.online/9403-jeksperimenty-ljejn-serial-experiments-lain-1998-smotret-onlajn.html
     """
 
     def __split_document_entrypoint__(self, doc: Document) -> Sequence[Document]:
@@ -96,11 +93,9 @@ class DubbersView(DictSchema):
 
 
 class VideoView(ListSchema):
-    """
-    Prepare:
+    """send request to anime page
 
-      1. GET to anime page
-
+    GET https://animania.online/9403-jeksperimenty-ljejn-serial-experiments-lain-1998-smotret-onlajn.html
     """
 
     def __split_document_entrypoint__(self, doc: Document) -> Sequence[Document]:

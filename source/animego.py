@@ -15,8 +15,7 @@ __all__ = [
 class OngoingView(ListSchema):
     """Get all available ongoings from main page
 
-    Prepare:
-      1. GET https://animego.org
+    GET https://animego.org
     """
 
     def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
@@ -53,8 +52,9 @@ class OngoingView(ListSchema):
 class SearchView(ListSchema):
     """Get all search results by query
 
-    Prepare:
-      1. GET to https://animego.org/search/anime?q={QUERY}"""
+    GET https://animego.org/search/anime
+    q={QUERY}
+    """
 
     def __split_document_entrypoint__(self, doc: Document) -> Document:
         return doc.css_all(".row > .col-ul-2")
@@ -72,8 +72,8 @@ class SearchView(ListSchema):
 class AnimeView(ItemSchema):
     """Anime page information
 
-    Prepare:
-      1. GET to anime page EG: https://animego.org/anime/eksperimenty-leyn-1114"""
+    GET https://animego.org/anime/eksperimenty-leyn-1114
+    """
 
     def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
         return assert_.re(doc.css("title").text(), ".* смотреть онлайн .*")
@@ -103,7 +103,8 @@ class DubbersView(DictSchema):
       1. get id from Anime object
       2. GET 'https://animego.org/anime/{Anime.id}/player?_allow=true'
       3. extract html from json by ['content'] key
-      4. OPTIONAL: unescape HTML"""
+      4. OPTIONAL: unescape HTML
+      """
 
     def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
         return assert_.css(doc, "#video-dubbing .mb-1")
@@ -150,10 +151,15 @@ class SourceView(ListSchema):
 
     Prepare:
       1. get num and id from Episode
-      2. GET https://animego.org/anime/series with  params
-        {"dubbing": 2, "provider": 24, "episode": Episode.num, "id": Episode.id}
-      2. extract html from json by ["content"] key
-      3. OPTIONAL: unescape
+
+      2.
+
+      GET https://animego.org/anime/series
+      dubbing=2&provider=24&episode={Episode.num}id={Episode.id}
+
+      3. extract html from json by ["content"] key
+
+      4. OPTIONAL: unescape document
     """
 
     def __split_document_entrypoint__(self, doc: Document) -> Document:

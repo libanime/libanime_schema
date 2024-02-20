@@ -8,8 +8,7 @@ __all__ = ["OngoingView", "SearchView", "AnimeView", "PlayerView", "PlayerUrlsVi
 
 class OngoingView(ListSchema):
     """
-    Prepare:
-      1. GET https://animejoy.ru
+    GET https://animejoy.ru
     """
 
     def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
@@ -33,12 +32,8 @@ class OngoingView(ListSchema):
 
 class SearchView(ListSchema):
     """
-    Prepare:
-
-      1. POST https://animejoy.ru/
-
-      2. payload:
-        story: <QUERY>, do: search, subaction: search
+    POST https://animejoy.ru/
+    story=<QUERY>&do=search&subaction=search
     """
 
     def __split_document_entrypoint__(self, doc: Document) -> Document:
@@ -62,8 +57,7 @@ class SearchView(ListSchema):
 
 class AnimeView(ItemSchema):
     """
-    Prepare:
-      1. GET anime page
+    GET https://animejoy.ru/tv-serialy/2654-van-pis-1001-.html
     """
 
     def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
@@ -90,9 +84,11 @@ class PlayerView(DictSchema):
     """Represent player name and player id
 
     Prepare:
-      1. get news_id from Anime
+      1. get news_id from Anime class
 
-      2. GET https://animejoy.ru/engine/ajax/playlists.php?news_id={Anime.news_id}&xfield=playlist
+      2.
+        GET https://animejoy.ru/engine/ajax/playlists.php
+        news_id={Anime.news_id}&xfield=playlist
 
       3. get json, get HTML by "response" key
 
@@ -116,9 +112,14 @@ class PlayerUrlsView(ListSchema):
     """Represent player url and player id
 
     Prepare:
-      1. get news_id from Anime
-      2. GET https://animejoy.ru/engine/ajax/playlists.php?news_id={Anime.news_id}&xfield=playlist
+      1. get news_id from Anime class
+
+      2.
+      GET https://animejoy.ru/engine/ajax/playlists.php
+      news_id={Anime.news_id}&xfield=playlist
+
       3. get json, get HTML by "response" key
+
       4. OPTIONAL: Unescape document
     """
 
@@ -129,9 +130,7 @@ class PlayerUrlsView(ListSchema):
         return assert_.css(doc, ".playlists-videos > .playlists-items ul > li")
 
     def player_id(self, doc: Document) -> Document:
-        """player id"""
         return doc.attr("data-id")
 
     def url(self, doc: Document) -> Document:
-        """player url"""
         return doc.attr("data-file")

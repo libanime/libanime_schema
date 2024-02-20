@@ -8,8 +8,7 @@ __all__ = ["OngoingView", "SearchView", "AnimeView", "EpisodeView"]
 
 class OngoingView(ListSchema):
     """
-    Prepare:
-     1. GET https://sovetromantica.com/anime
+    GET https://sovetromantica.com/anime
     """
 
     def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
@@ -36,9 +35,9 @@ class OngoingView(ListSchema):
 class SearchView(ListSchema):
     """Get all search results by query
 
-    Prepare:
-
-      1. GET https://sovetromantica.com/anime?query=<QUERY>"""
+    GET https://sovetromantica.com/anime
+    query=<QUERY>
+    """
 
     def __split_document_entrypoint__(self, doc: Document) -> Document:
         return doc.css_all(".anime--block__desu")
@@ -64,9 +63,8 @@ class AnimeView(ItemSchema):
     # TODO add example
     """Anime page information
 
-    Prepare:
-
-      1. GET to anime URL page"""
+    GET https://sovetromantica.com/anime/1459-sousou-no-frieren
+    """
 
     def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
         return assert_.re(doc.css("title").text(), "/ SovetRomantica")
@@ -102,9 +100,8 @@ class EpisodeView(ListSchema):
 
     target page maybe does not contain video!
 
-    Prepare:
+    GET https://sovetromantica.com/anime/1459-sousou-no-frieren
 
-      1. GET https://sovetromantica.com/anime?query=<QUERY>
     """
 
     def __split_document_entrypoint__(self, doc: Document) -> Document:
