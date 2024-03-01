@@ -48,7 +48,7 @@ class SearchView(ListSchema):
         return doc.css('img.swiper-lazy').attr('src').format('https://sameband.studio{{}}')
 
     def url(self, doc: Document):
-        return doc.css('.info').attr('href')
+        return doc.css('.image').attr('href')
 
 
 class AnimeView(ItemSchema):
