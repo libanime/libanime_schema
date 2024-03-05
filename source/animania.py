@@ -1,7 +1,6 @@
 from typing import Optional, Sequence
 
-from ssc_codegen import Document, DictSchema, ListSchema, ItemSchema, assert_
-
+from ssc_codegen import DictSchema, Document, ItemSchema, ListSchema, assert_
 
 __all__ = ["AnimeView", "OngoingView", "VideoView", "SearchView", "DubbersView"]
 
@@ -25,11 +24,7 @@ class OngoingView(ListSchema):
         return doc.css("h5").text()
 
     def thumbnail(self, doc: Document):
-        return (
-            doc.css("img")
-            .attr("data-src")
-            .format("https://animania.online{{}}")
-        )
+        return doc.css("img").attr("data-src").format("https://animania.online{{}}")
 
 
 class SearchView(ListSchema):
@@ -65,11 +60,7 @@ class AnimeView(ItemSchema):
         return doc.css("#fdesc").text()
 
     def thumbnail(self, doc: Document):
-        return (
-            doc.css(".fposter img")
-            .attr("data-src")
-            .format("https://animania.online{{}}")
-        )
+        return doc.css(".fposter img").attr("data-src").format("https://animania.online{{}}")
 
 
 class DubbersView(DictSchema):

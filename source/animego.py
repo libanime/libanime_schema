@@ -1,6 +1,6 @@
 from typing import Optional, Sequence
 
-from ssc_codegen import Document, DictSchema, ListSchema, ItemSchema, assert_
+from ssc_codegen import DictSchema, Document, ItemSchema, ListSchema, assert_
 
 __all__ = [
     "OngoingView",
@@ -27,20 +27,13 @@ class OngoingView(ListSchema):
 
     def url(self, doc: Document):
         """ongoing page"""
-        return (
-            doc.attr("onclick")
-            .lstrip("location.href=")
-            .strip("'")
-            .format("https://animego.org{{}}")
-        )
+        return doc.attr("onclick").lstrip("location.href=").strip("'").format("https://animego.org{{}}")
 
     def title(self, doc: Document):
         return doc.css(".last-update-title").text()
 
     def thumbnail(self, doc: Document):
-        return (
-            doc.css(".lazy").attr("style").lstrip("background-image: url(").rstrip(");")
-        )
+        return doc.css(".lazy").attr("style").lstrip("background-image: url(").rstrip(");")
 
     def episode(self, doc: Document):
         return doc.css(".text-truncate").text().re("(\d+)\s")
@@ -104,7 +97,7 @@ class DubbersView(DictSchema):
       2. GET 'https://animego.org/anime/{Anime.id}/player?_allow=true'
       3. extract html from json by ['content'] key
       4. OPTIONAL: unescape HTML
-      """
+    """
 
     def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
         return assert_.css(doc, "#video-dubbing .mb-1")
@@ -117,7 +110,7 @@ class DubbersView(DictSchema):
         return doc.attr("data-dubbing")
 
     def value(self, doc: Document) -> Document:
-        return doc.css("span").text().strip("\n").strip(" ").rstrip('\n')
+        return doc.css("span").text().strip("\n").strip(" ").rstrip("\n")
 
 
 class EpisodeView(ListSchema):

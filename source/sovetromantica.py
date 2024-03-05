@@ -1,7 +1,6 @@
 from typing import Optional, Sequence
 
-from ssc_codegen import Document, DictSchema, ListSchema, ItemSchema, assert_
-
+from ssc_codegen import DictSchema, Document, ItemSchema, ListSchema, assert_
 
 __all__ = ["OngoingView", "SearchView", "AnimeView", "EpisodeView"]
 
@@ -73,7 +72,7 @@ class AnimeView(ItemSchema):
         return doc.css(".anime-name .block--container").text()
 
     def description(self, doc: Document):
-        with doc.default(''):
+        with doc.default(""):
             return doc.css("#js-description_open-full").text()
 
     def thumbnail(self, doc: Document):

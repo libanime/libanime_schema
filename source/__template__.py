@@ -1,6 +1,6 @@
 from typing import Optional, Sequence
 
-from ssc_codegen import Document, DictSchema, ListSchema, ItemSchema, assert_
+from ssc_codegen import DictSchema, Document, ItemSchema, ListSchema, assert_
 
 
 class OngoingView(ListSchema):

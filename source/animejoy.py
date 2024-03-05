@@ -1,6 +1,6 @@
 from typing import Optional, Sequence
 
-from ssc_codegen import Document, DictSchema, ListSchema, ItemSchema, assert_
+from ssc_codegen import DictSchema, Document, ItemSchema, ListSchema, assert_
 
 # NOTE: this source have CLOUDFLARE, sometimes maybe not works
 __all__ = ["OngoingView", "SearchView", "AnimeView", "PlayerView", "PlayerUrlsView"]
@@ -70,7 +70,7 @@ class AnimeView(ItemSchema):
         return doc.css(".romanji").text()
 
     def description(self, doc: Document):
-        return doc.css_all(".pcdescrf p").text().join(" ").lstrip('Описание:').lstrip(' ')
+        return doc.css_all(".pcdescrf p").text().join(" ").lstrip("Описание:").lstrip(" ")
 
     def thumbnail(self, doc: Document):
         return doc.css(".fr-fil").attr("src").format("https://animejoy.ru{{}}")

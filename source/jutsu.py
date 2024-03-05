@@ -1,6 +1,6 @@
 from typing import Optional, Sequence
 
-from ssc_codegen import Document, DictSchema, ListSchema, ItemSchema, assert_
+from ssc_codegen import DictSchema, Document, ItemSchema, ListSchema, assert_
 
 __all__ = ["OngoingView", "SearchView", "SourceView", "AnimeView", "EpisodeView"]
 
@@ -12,24 +12,25 @@ class OngoingView(ListSchema):
     ajax_load=yes&start_from_page=1&show_search=&anime_of_user=
 
     """
+
     def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
-        return assert_.css(doc, '.all_anime_global')
+        return assert_.css(doc, ".all_anime_global")
 
     def __split_document_entrypoint__(self, doc: Document) -> Document:
-        return doc.css_all('.all_anime_global')
+        return doc.css_all(".all_anime_global")
 
     def url(self, doc: Document):
-        return doc.css('a').attr('href').format('https://jut.su{{}}')
+        return doc.css("a").attr("href").format("https://jut.su{{}}")
 
     def title(self, doc: Document):
-        return doc.css('.aaname').text()
+        return doc.css(".aaname").text()
 
     def thumbnail(self, doc: Document):
         """signature:
 
         background: url('https://gen.jut.su/uploads/animethumbs/aaaa.jpg')  no-repeat;
         """
-        return doc.css('.all_anime_image').attr('style').re("'(https?://.*?)'")
+        return doc.css(".all_anime_image").attr("style").re("'(https?://.*?)'")
 
     def counts(self, doc: Document):
         """signature:
@@ -40,7 +41,7 @@ class OngoingView(ListSchema):
                 14 фильмов
         </div>
         """
-        return doc.css_all('.aailines').text().strip('\r\n').join(' ')
+        return doc.css_all(".aailines").text().strip("\r\n").join(" ")
 
 
 class SearchView(ListSchema):
@@ -50,23 +51,23 @@ class SearchView(ListSchema):
     """
 
     def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
-        return assert_.css(doc, '.all_anime_global')
+        return assert_.css(doc, ".all_anime_global")
 
     def __split_document_entrypoint__(self, doc: Document) -> Document:
-        return doc.css_all('.all_anime_global')
+        return doc.css_all(".all_anime_global")
 
     def url(self, doc: Document):
-        return doc.css('a').attr('href').format('https://jut.su{{}}')
+        return doc.css("a").attr("href").format("https://jut.su{{}}")
 
     def title(self, doc: Document):
-        return doc.css('.aaname').text()
+        return doc.css(".aaname").text()
 
     def thumbnail(self, doc: Document):
         """signature:
 
         background: url('https://gen.jut.su/uploads/animethumbs/aaaa.jpg')  no-repeat;
         """
-        return doc.css('.all_anime_image').attr('style').re("'(https?://.*?)'")
+        return doc.css(".all_anime_image").attr("style").re("'(https?://.*?)'")
 
     def counts(self, doc: Document):
         """signature:
@@ -77,39 +78,41 @@ class SearchView(ListSchema):
                 14 фильмов
         </div>
         """
-        return doc.css_all('.aailines').text().strip('\r\n').join(' ')
+        return doc.css_all(".aailines").text().strip("\r\n").join(" ")
 
 
 class AnimeView(ItemSchema):
     """
     GET https://jut.su/toradora/
     """
+
     def title(self, doc: Document):
         # test cases:
         # Смотреть Клинок, рассекающий демонов все серии и сезоны
         # Смотреть ТораДора все серии
-        return doc.css('.anime_padding_for_title').text().re('Смотреть (.*?) все')
+        return doc.css(".anime_padding_for_title").text().re("Смотреть (.*?) все")
 
     def description(self, doc: Document):
-        return doc.css_all('.uv_rounded_bottom span').text().join(' ')
+        return doc.css_all(".uv_rounded_bottom span").text().join(" ")
 
     def thumbnail(self, doc: Document):
         # background: url('https://gen.jut.su/uploads/animethumbs/anime_toradora.jpg') no-repeat; background-size: 104px auto;
-        return doc.css('.all_anime_title').attr('style').re("'(https?://.*?)'")
+        return doc.css(".all_anime_title").attr("style").re("'(https?://.*?)'")
 
 
 class EpisodeView(ListSchema):
     """
     GET https://jut.su/toradora/
     """
+
     def __split_document_entrypoint__(self, doc: Document) -> Document:
-        return doc.css_all('.video')
+        return doc.css_all(".video")
 
     def title(self, doc: Document):
-        return doc.text().strip(' ')
+        return doc.text().strip(" ")
 
     def url(self, doc: Document):
-        return doc.attr('href').format('https://jut.su{{}}')
+        return doc.attr("href").format("https://jut.su{{}}")
 
 
 class SourceView(ItemSchema):
@@ -132,18 +135,19 @@ class SourceView(ItemSchema):
 
     mpv s["url_1080"] --user-agent="X"  # 200, OK
     """
+
     def url_1080(self, doc: Document):
         with doc.default(None):
-            return doc.css('.watch_additional_players .wap_player').attr('data-player-1080')
+            return doc.css(".watch_additional_players .wap_player").attr("data-player-1080")
 
     def url_720(self, doc: Document):
         with doc.default(None):
-            return doc.css('.watch_additional_players .wap_player').attr('data-player-720')
+            return doc.css(".watch_additional_players .wap_player").attr("data-player-720")
 
     def url_480(self, doc: Document):
         with doc.default(None):
-            return doc.css('.watch_additional_players .wap_player').attr('data-player-480')
+            return doc.css(".watch_additional_players .wap_player").attr("data-player-480")
 
     def url_360(self, doc: Document):
         with doc.default(None):
-            return doc.css('.watch_additional_players .wap_player').attr('data-player-360')
+            return doc.css(".watch_additional_players .wap_player").attr("data-player-360")
