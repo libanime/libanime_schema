@@ -10,9 +10,6 @@ class OngoingView(ListSchema):
     GET https://sovetromantica.com/anime
     """
 
-    def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
-        return assert_.re(doc.css("title").text(), "Аниме / SovetRomantica")
-
     def __split_document_entrypoint__(self, doc: Document) -> Document:
         return doc.css_all(".anime--block__desu")
 
@@ -36,6 +33,10 @@ class SearchView(ListSchema):
 
     GET https://sovetromantica.com/anime
     query=<QUERY>
+
+    EXAMPLE:
+        GET https://sovetromantica.com/anime
+        query=LAIN
     """
 
     def __split_document_entrypoint__(self, doc: Document) -> Document:
@@ -62,11 +63,11 @@ class AnimeView(ItemSchema):
     # TODO add example
     """Anime page information
 
-    GET https://sovetromantica.com/anime/1459-sousou-no-frieren
-    """
+    GET https://sovetromantica.com/anime/<ANIME PATH>
 
-    def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
-        return assert_.re(doc.css("title").text(), "/ SovetRomantica")
+    EXAMPLE:
+        GET https://sovetromantica.com/anime/1459-sousou-no-frieren
+    """
 
     def title(self, doc: Document):
         return doc.css(".anime-name .block--container").text()
@@ -99,7 +100,10 @@ class EpisodeView(ListSchema):
 
     target page maybe does not contain video!
 
-    GET https://sovetromantica.com/anime/1459-sousou-no-frieren
+    GET https://sovetromantica.com/anime/<ANIME PATH>
+
+    EXAMPLE:
+        GET https://sovetromantica.com/anime/1459-sousou-no-frieren
 
     """
 

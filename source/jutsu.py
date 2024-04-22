@@ -13,9 +13,6 @@ class OngoingView(ListSchema):
 
     """
 
-    def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
-        return assert_.css(doc, ".all_anime_global")
-
     def __split_document_entrypoint__(self, doc: Document) -> Document:
         return doc.css_all(".all_anime_global")
 
@@ -48,10 +45,11 @@ class SearchView(ListSchema):
     """
     POST https://jut.su/anime/
     ajax_load=yes&start_from_page=1&show_search=<QUERY>&anime_of_user=
-    """
 
-    def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
-        return assert_.css(doc, ".all_anime_global")
+    EXAMPLE:
+        POST https://jut.su/anime/
+        ajax_load=yes&start_from_page=1&show_search=LA&anime_of_user=
+    """
 
     def __split_document_entrypoint__(self, doc: Document) -> Document:
         return doc.css_all(".all_anime_global")
@@ -83,7 +81,10 @@ class SearchView(ListSchema):
 
 class AnimeView(ItemSchema):
     """
-    GET https://jut.su/toradora/
+    GET https://jut.su/<ANIME PATH>
+
+    EXAMPLE:
+        GET https://jut.su/kime-no-yaiba/
     """
 
     def title(self, doc: Document):
@@ -102,7 +103,10 @@ class AnimeView(ItemSchema):
 
 class EpisodeView(ListSchema):
     """
-    GET https://jut.su/toradora/
+    GET https://jut.su/<ANIME PATH>
+
+    EXAMPLE:
+        GET https://jut.su/kime-no-yaiba/
     """
 
     def __split_document_entrypoint__(self, doc: Document) -> Document:
@@ -117,7 +121,7 @@ class EpisodeView(ListSchema):
 
 class SourceView(ItemSchema):
     """
-    GET https://jut.su/toradora/episode-1.html
+    GET https://jut.su/<ANIME PATH>/<SEASON?>/episode-<NUM>.html
 
     NOTE: VIDEO REQUEST SHOULD HAVE SAME USER-AGENT AS CLIENT
 
@@ -134,6 +138,9 @@ class SourceView(ItemSchema):
     mpv s["url_1080"] --user-agent="Y"  # 403, FORBIDDEN
 
     mpv s["url_1080"] --user-agent="X"  # 200, OK
+
+    EXAMPLE:
+        GET https://jut.su/kime-no-yaiba/season-1/episode-1.html
     """
 
     def url_1080(self, doc: Document):

@@ -18,10 +18,6 @@ class OngoingView(ListSchema):
     GET https://animego.org
     """
 
-    def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
-        doc.css("title").text()
-        return assert_.re(doc, "Смотреть Аниме онлайн")
-
     def __split_document_entrypoint__(self, doc: Document) -> Document:
         return doc.css_all(".border-bottom-0.cursor-pointer")
 
@@ -47,6 +43,10 @@ class SearchView(ListSchema):
 
     GET https://animego.org/search/anime
     q={QUERY}
+
+    EXAMPLE:
+
+        GET https://animego.org/search/anime?q=LAIN
     """
 
     def __split_document_entrypoint__(self, doc: Document) -> Document:
@@ -63,13 +63,14 @@ class SearchView(ListSchema):
 
 
 class AnimeView(ItemSchema):
-    """Anime page information
+    """Anime page information. anime path contains in SearchView.url or Ongoing.urk
 
-    GET https://animego.org/anime/eksperimenty-leyn-1114
+    GET https://animego.org/anime/<ANIME_PATH>
+
+    EXAMPLE:
+
+        GET https://animego.org/anime/eksperimenty-leyn-1114
     """
-
-    def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
-        return assert_.re(doc.css("title").text(), ".* смотреть онлайн .*")
 
     def title(self, doc: Document):
         return doc.css(".anime-title h1").text()
@@ -97,6 +98,9 @@ class DubbersView(DictSchema):
       2. GET 'https://animego.org/anime/{Anime.id}/player?_allow=true'
       3. extract html from json by ['content'] key
       4. OPTIONAL: unescape HTML
+
+    EXAMPLE:
+        GET https://animego.org/anime/anime/1114//player?_allow=true
     """
 
     def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
@@ -121,6 +125,9 @@ class EpisodeView(ListSchema):
       2. GET 'https://animego.org/anime/{Anime.id}/player?_allow=true'
       3. extract html from json by ['content'] key
       4. OPTIONAL: unescape HTML
+
+    EXAMPLE:
+        GET https://animego.org/anime/anime/1114//player?_allow=true
     """
 
     def __split_document_entrypoint__(self, doc: Document) -> Document:
@@ -153,6 +160,10 @@ class SourceView(ListSchema):
       3. extract html from json by ["content"] key
 
       4. OPTIONAL: unescape document
+
+    EXAMPLE:
+
+        GET https://animego.org/anime/series?dubbing=2&provider=24&episode=2&id=15837
     """
 
     def __split_document_entrypoint__(self, doc: Document) -> Document:

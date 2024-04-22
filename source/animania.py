@@ -11,9 +11,6 @@ class OngoingView(ListSchema):
     GET https://animania.online/
     """
 
-    def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
-        pass
-
     def __split_document_entrypoint__(self, doc: Document) -> Document:
         return doc.css_all(".short-tablet")
 
@@ -32,6 +29,11 @@ class SearchView(ListSchema):
 
     GET https://animania.online/index.php
     story={QUERY}&do=search&subaction=search
+
+
+    EXAMPLE:
+
+        GET https://animania.online/index.php?do=search&subaction=search&story=LAIN
     """
 
     def __split_document_entrypoint__(self, doc: Document) -> Document:
@@ -50,7 +52,10 @@ class SearchView(ListSchema):
 class AnimeView(ItemSchema):
     """send request to anime page
 
-    GET https://animania.online/9403-jeksperimenty-ljejn-serial-experiments-lain-1998-smotret-onlajn.html
+    GET https://animania.online/<ANIME_PAGE_PATH>
+
+    EXAMPLE:
+        GET https://animania.online/9403-jeksperimenty-ljejn-serial-experiments-lain-1998-smotret-onlajn.html
     """
 
     def title(self, doc: Document):
@@ -66,7 +71,10 @@ class AnimeView(ItemSchema):
 class DubbersView(DictSchema):
     """send to anime page request
 
-    GET https://animania.online/9403-jeksperimenty-ljejn-serial-experiments-lain-1998-smotret-onlajn.html
+    GET https://animania.online/<ANIME PATH>
+
+    EXAMPLE:
+        GET https://animania.online/9403-jeksperimenty-ljejn-serial-experiments-lain-1998-smotret-onlajn.html
     """
 
     def __split_document_entrypoint__(self, doc: Document) -> Sequence[Document]:
@@ -86,7 +94,9 @@ class DubbersView(DictSchema):
 class VideoView(ListSchema):
     """send request to anime page
 
-    GET https://animania.online/9403-jeksperimenty-ljejn-serial-experiments-lain-1998-smotret-onlajn.html
+        GET https://animania.online/<ANIME PATH>
+    EXAMPLE:
+        GET https://animania.online/9403-jeksperimenty-ljejn-serial-experiments-lain-1998-smotret-onlajn.html
     """
 
     def __split_document_entrypoint__(self, doc: Document) -> Sequence[Document]:

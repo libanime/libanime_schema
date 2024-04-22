@@ -11,9 +11,6 @@ class OngoingView(ListSchema):
     GET https://animejoy.ru
     """
 
-    def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
-        return assert_.re(doc.css("title").text(), "AnimeJoy.Ru аниме с субтитрами")
-
     def __split_document_entrypoint__(self, doc: Document) -> Document:
         return doc.css_all(".shortstory")
 
@@ -34,6 +31,10 @@ class SearchView(ListSchema):
     """
     POST https://animejoy.ru/
     story=<QUERY>&do=search&subaction=search
+
+    EXAMPLE:
+        POST https://animejoy.ru
+        story=LAIN&do=search&subaction=search
     """
 
     def __split_document_entrypoint__(self, doc: Document) -> Document:
@@ -57,7 +58,10 @@ class SearchView(ListSchema):
 
 class AnimeView(ItemSchema):
     """
-    GET https://animejoy.ru/tv-serialy/2654-van-pis-1001-.html
+    GET https://animejoy.ru/<ANIME PATH>
+
+    EXAMPLE:
+        GET https://animejoy.ru/tv-serialy/2654-van-pis-1001-.html
     """
 
     def __pre_validate_document__(self, doc: Document) -> Optional[Document]:
@@ -90,9 +94,13 @@ class PlayerView(DictSchema):
         GET https://animejoy.ru/engine/ajax/playlists.php
         news_id={Anime.news_id}&xfield=playlist
 
-      3. get json, get HTML by "response" key
+      3. get json, get HTML by ["response"] key
 
       4. OPTIONAL: Unescape document
+
+    EXAMPLE:
+        GET https://animejoy.ru/engine/ajax/playlists.php
+        news_id=2789&xfield=playlist
     """
 
     def __split_document_entrypoint__(self, doc: Document) -> Sequence[Document]:
@@ -121,6 +129,10 @@ class PlayerUrlsView(ListSchema):
       3. get json, get HTML by "response" key
 
       4. OPTIONAL: Unescape document
+
+    EXAMPLE:
+        https://animejoy.ru/engine/ajax/playlists.php
+        news_id=2789&xfield=playlist
     """
 
     def __split_document_entrypoint__(self, doc: Document) -> Sequence[Document]:
