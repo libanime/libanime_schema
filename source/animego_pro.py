@@ -1,4 +1,3 @@
-# TODO test
 from typing import Optional, Sequence
 
 from ssc_codegen import DictSchema, Document, ItemSchema, ListSchema, assert_
@@ -9,6 +8,7 @@ __all__ = [
     "AnimeView",
     "EpisodesView",
     "FirstPlayerUrlView",
+    "SourceKodikView"
 ]
 
 
@@ -151,4 +151,28 @@ class FirstPlayerUrlView(ItemSchema):
                           vvvv       vvvvv                                                                vvvv
     '//kodik.info/serial/56520/fd227df3f52d477c793a58f4c99ee4f2/720p?translations=false&only_translations=28220'
         """
-        return doc.css('#player_kodik > iframe').attr('src').format("https://{{}}")
+        return doc.css('#player_kodik > iframe').attr('src').format("https:{{}}")
+
+
+class SourceKodikView(ListSchema):
+    """extract videos from kodik serial path. this values helps create video player link
+
+    Example:
+         SERIAL, NOT SERIA path====vvvvv
+        - GET 'https://kodik.info/serial/58496/d2a8737db86989de0863bac5c14ce18b/720p?translations=false&only_translations=1895'
+    """
+    def __split_document_entrypoint__(self, doc: Document) -> Document:
+        return doc.css_all('.series-options > div > option')
+
+    def value(self, doc: Document):
+        return doc.attr('value')
+
+    def id(self, doc: Document):
+        return doc.attr('data-id')
+
+    def hash(self, doc: Document):
+        return doc.attr('data-hash')
+
+    def title(self, doc: Document):
+        return doc.attr('data-title')
+
