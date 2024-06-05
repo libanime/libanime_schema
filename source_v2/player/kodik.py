@@ -26,6 +26,7 @@ class MovieTranslationsPanel(ListSchema):
 
 
 class KodikAPIPayload(ItemSchema):
+    """payload for Kodik API request"""
     # single params pairs
     d = R().re('var\s*domain\s+=\s+[\'"](.*?)[\'"];')
     d_sign = R().re('var\s*d_sign\s+=\s+[\'"](.*?)[\'"];')
