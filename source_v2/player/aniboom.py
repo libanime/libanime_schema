@@ -1,7 +1,7 @@
 from ssc_codegen import DictSchema, ItemSchema, ListSchema, D, N, R
 
 
-class AniboomResult(ItemSchema):
+class AniboomPage(ItemSchema):
     """Extract MPD and M3U8 urls
 
     Required `referer="https://animego.org/` HEADER
