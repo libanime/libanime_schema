@@ -63,7 +63,7 @@ class AnimePage(ItemSchema):
     """
 
     title = D().css(".anime-title h1").text()
-    description = D().css_all(".description").text().join(" ").re_sub(r'^\s+', "").re_sub(r"\s+$", "")
+    description = D().css_all(".description").text().join(" ").re_sub(r'^\s+|\s+$', "")
     thumbnail = D().css("#content img").attr("src")
     # anime id required for next requests (for DubberView, Source schemas)
     id = D().css(".br-2 .my-list-anime").attr("id").lstrip("my-list-")
@@ -78,7 +78,7 @@ class EpisodeDubbersView(DictSchema):
     __SIGNATURE__ = {"<dubber_id>": "<dubber_name>", "<id>": "..."}
 
     __KEY__ = D().attr("data-dubbing")
-    __VALUE__ = D().css("span").text().re_sub(r"^\s+", "").re_sub(r"\s+$", "")
+    __VALUE__ = D().css("span").text().re_sub(r'^\s+|\s+$', "")
 
 
 class EpisodesView(ListSchema):
