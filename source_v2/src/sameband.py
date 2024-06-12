@@ -3,18 +3,11 @@ from ssc_codegen.document import D, N
 
 
 class OngoingPage(ListSchema):
-    """GET https://sameband.studio"""
-    # [0] - ongoings
-    # [1] - new
-    # [2] - already watch
-    # [3] - most rated
-    # [4] - now discussion
-    # [5] - Coming soon element
-    # parsel index issues
-    __SPLIT_DOC__ = D().css(".container-fluid > .swiper").css_all(".poster")
+    """GET https://sameband.studio/novinki"""
+    __SPLIT_DOC__ = D().css_all(".col-auto")
 
     url = D().css("a").attr("href")
-    title = D().attr("title")
+    title = D().css('.col-auto .poster').attr("title")
     thumbnail = D().css("img.swiper-lazy").attr("src").format("https://sameband.studio{{}}")
 
 
