@@ -1,4 +1,4 @@
-from ssc_codegen import DictSchema, ItemSchema, ListSchema, D, N, R
+from ssc_codegen import D, DictSchema, ItemSchema, ListSchema, N, R
 
 
 class AniboomPage(ItemSchema):
@@ -68,17 +68,23 @@ class AniboomPage(ItemSchema):
     # "quality":true, "qualityVideo":1080, "vast":true, "country":"RU",
     # "platform":"Linux","rating":"16+","nshowbl":false,"limitRate":false,
     # "aBlocklimitRate":false}
-    data_parameters = (D().css('#video').attr('data-parameters')
-                       .replace('\\', '').replace('&quot;', '"')  # json unescape
-                       )
-    hls = (D().css('#video').attr('data-parameters')
-            .replace('\\', '').replace('&quot;', '"')
-            .re('"hls":"{"src":"(https?.*?\.m3u8)"')
-            )
+    data_parameters = (
+        D().css("#video").attr("data-parameters").replace("\\", "").replace("&quot;", '"')  # json unescape
+    )
+    hls = (
+        D()
+        .css("#video")
+        .attr("data-parameters")
+        .replace("\\", "")
+        .replace("&quot;", '"')
+        .re('"hls":"{"src":"(https?.*?\.m3u8)"')
+    )
 
-    dash = (D().css('#video').attr('data-parameters')
-           .replace('\\', '').replace('&quot;', '"')
-           .re('"dash":"{"src":"(https?.*?\.(?:mpd|m3u8))"')
-           )
-
-
+    dash = (
+        D()
+        .css("#video")
+        .attr("data-parameters")
+        .replace("\\", "")
+        .replace("&quot;", '"')
+        .re('"dash":"{"src":"(https?.*?\.(?:mpd|m3u8))"')
+    )

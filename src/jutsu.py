@@ -1,8 +1,7 @@
-from typing import Optional, Sequence, List
+from typing import List, Optional, Sequence
 
-from ssc_codegen.schema import DictSchema, ItemSchema, ListSchema
 from ssc_codegen.document import D, N
-
+from ssc_codegen.schema import DictSchema, ItemSchema, ListSchema
 
 
 class OngoingPage(ListSchema):
@@ -36,6 +35,7 @@ class SearchPage(OngoingPage):
         POST https://jut.su/anime/
         ajax_load=yes&start_from_page=1&show_search=LA&anime_of_user=
     """
+
     pass
 
 
@@ -53,6 +53,7 @@ class AnimePage(ItemSchema):
     EXAMPLE:
         GET https://jut.su/kime-no-yaiba/
     """
+
     # test cases:
     # Смотреть Клинок, рассекающий демонов все серии и сезоны
     # Смотреть ТораДора все серии
@@ -68,8 +69,8 @@ class SourceView(DictSchema):
 
     __SPLIT_DOC__ = D().css_all("#my-player > source")
     __SIGNATURE__ = {"QUALITY": "URL"}
-    __KEY__ = D().default('null').attr('res')
-    __VALUE__ = D().default(None).attr('src')
+    __KEY__ = D().default("null").attr("res")
+    __VALUE__ = D().default(None).attr("src")
 
 
 class SourcePage(ItemSchema):
@@ -103,4 +104,5 @@ class SourcePage(ItemSchema):
         - 'block_video_text_str_everywhere\\\+' - К сожалению, это видео недоступно.
         - 'block_video_text_str\\\+' - К сожалению, в России это видео недоступно.
     """
+
     videos: SourceView = N().sub_parser(SourceView)

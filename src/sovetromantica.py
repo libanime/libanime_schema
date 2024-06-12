@@ -1,6 +1,5 @@
-from ssc_codegen.schema import DictSchema, ItemSchema, ListSchema
 from ssc_codegen.document import D, N
-
+from ssc_codegen.schema import DictSchema, ItemSchema, ListSchema
 
 
 class OngoingPage(ListSchema):
@@ -30,6 +29,7 @@ class SearchPage(OngoingPage):
         GET https://sovetromantica.com/anime
         query=LAIN
     """
+
     pass
 
 
@@ -44,6 +44,7 @@ class EpisodeView(ListSchema):
         GET https://sovetromantica.com/anime/1459-sousou-no-frieren
 
     """
+
     __SPLIT_DOC__ = D().css_all(".episodes-slick_item")
 
     url = D().css("a").attr("href").format("https://sovetromantica.com{{}}")

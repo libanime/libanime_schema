@@ -1,8 +1,9 @@
-from ssc_codegen import DictSchema, ItemSchema, ListSchema, D, N, R
+from ssc_codegen import D, DictSchema, ItemSchema, ListSchema, N, R
 
 
 class MovieTranslationsPanel(ListSchema):
     """Representation available dubbers and params. Useful for switch dubber"""
+
     # element signature eg:
     # < option
     # value = "1291"
@@ -14,29 +15,30 @@ class MovieTranslationsPanel(ListSchema):
     # data - title = "Crunchyroll.Subtitles"
     # > Crunchyroll.Subtitles < / option >
 
-    __SPLIT_DOC__ = D().css('.movie-translations-box').css_all('option')
+    __SPLIT_DOC__ = D().css(".movie-translations-box").css_all("option")
 
     name = D().text().trim(" ")
-    value = D().attr('value')
-    data_id = D().attr('data-id')
-    data_translation_type = D().attr('data-translation-type')
-    data_media_hash = D().attr('data-media-hash')
-    data_media_type = D().attr('data-media-type')
-    data_title = D().attr('data-title')
+    value = D().attr("value")
+    data_id = D().attr("data-id")
+    data_translation_type = D().attr("data-translation-type")
+    data_media_hash = D().attr("data-media-hash")
+    data_media_type = D().attr("data-media-type")
+    data_title = D().attr("data-title")
 
 
 class KodikAPIPayload(ItemSchema):
     """payload for Kodik API request"""
+
     # single params pairs
-    d = R().re('var\s*domain\s+=\s+[\'"](.*?)[\'"];')
-    d_sign = R().re('var\s*d_sign\s+=\s+[\'"](.*?)[\'"];')
-    pd = R().re('var\s*pd\s+=\s+[\'"](.*?)[\'"];')
-    pd_sign = R().re('var\s*pd_sign\s+=\s+[\'"](.*?)[\'"];')
-    ref = R().re('var\s*ref\s+=\s+[\'"](.*?)[\'"];')
-    ref_sign = R().re('var\s*ref_sign\s+=\s+[\'"](.*?)[\'"];')
-    type = R().re('videoInfo\.type\s*=\s*[\'"](.*?)[\'"];')
-    hash = R().re('videoInfo\.hash\s*=\s*[\'"](.*?)[\'"];')
-    id = R().re('videoInfo\.id\s*=\s*[\'"](.*?)[\'"];')
+    d = R().re("var\s*domain\s+=\s+['\"](.*?)['\"];")
+    d_sign = R().re("var\s*d_sign\s+=\s+['\"](.*?)['\"];")
+    pd = R().re("var\s*pd\s+=\s+['\"](.*?)['\"];")
+    pd_sign = R().re("var\s*pd_sign\s+=\s+['\"](.*?)['\"];")
+    ref = R().re("var\s*ref\s+=\s+['\"](.*?)['\"];")
+    ref_sign = R().re("var\s*ref_sign\s+=\s+['\"](.*?)['\"];")
+    type = R().re("videoInfo\.type\s*=\s*['\"](.*?)['\"];")
+    hash = R().re("videoInfo\.hash\s*=\s*['\"](.*?)['\"];")
+    id = R().re("videoInfo\.id\s*=\s*['\"](.*?)['\"];")
 
 
 class KodikPage(ItemSchema):
@@ -65,6 +67,7 @@ class KodikPage(ItemSchema):
         - 404 DELETED: eg: https://kodik.info/seria/310427/09985563d891b56b1e9b01142ae11872/720p
 
     """
+
     # original player decode signature:
     # function (e) {
     #   var t;
@@ -84,7 +87,7 @@ class KodikPage(ItemSchema):
     # can be json unmarshal
     # contains keys:
     # ['d', 'd_sign', 'pd', 'pd_sign', 'ref', 'ref_sign', 'advert_debug', 'first_url']
-    url_params = R().re('var\s*urlParams\s*=\s*[\'"](\{.*\})[\'"]')
+    url_params = R().re("var\s*urlParams\s*=\s*['\"](\{.*\})['\"]")
     api_payload: KodikAPIPayload = N().sub_parser(KodikAPIPayload)
 
     # kodik sometimes changes the API path. It must be extracted from the player source code
@@ -99,7 +102,8 @@ class KodikPage(ItemSchema):
 # TODO create function signature
 class KodikApiPath(ItemSchema):
     """Extract the API path from js player source"""
+
     # js api path signature examples:
     # ... $.ajax({type:"POST",url:atob("L2Z0b3I="),cache:! ...
     # ... $.ajax({type: 'POST', url:atob('L3RyaQ=='),cache: !1 ...
-    path = R().re('\$\.ajax\([^>]+,url:\s*atob\(["\']([\w=]+)["\']\)')
+    path = R().re("\$\.ajax\([^>]+,url:\s*atob\([\"']([\w=]+)[\"']\)")

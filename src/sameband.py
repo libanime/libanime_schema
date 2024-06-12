@@ -1,13 +1,14 @@
-from ssc_codegen.schema import DictSchema, ItemSchema, ListSchema
 from ssc_codegen.document import D, N
+from ssc_codegen.schema import DictSchema, ItemSchema, ListSchema
 
 
 class OngoingPage(ListSchema):
     """GET https://sameband.studio/novinki"""
+
     __SPLIT_DOC__ = D().css_all(".col-auto")
 
     url = D().css("a").attr("href")
-    title = D().css('.col-auto .poster').attr("title")
+    title = D().css(".col-auto .poster").attr("title")
     thumbnail = D().css("img.swiper-lazy").attr("src").format("https://sameband.studio{{}}")
 
 
@@ -23,6 +24,7 @@ class SearchPage(ListSchema):
         POST https://sameband.studio/index.php?do=search
     do=search&subaction=search&search_start=0&full_search=0&result_from=1&story=ВЕДЬ
     """
+
     __SPLIT_DOC__ = D().css_all(".col-auto")
 
     title = D().css(".col-auto .poster").attr("title")

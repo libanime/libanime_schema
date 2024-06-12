@@ -1,7 +1,7 @@
-from typing import Optional, Sequence, List
+from typing import List, Optional, Sequence
 
-from ssc_codegen.schema import DictSchema, ItemSchema, ListSchema
 from ssc_codegen.document import D, N
+from ssc_codegen.schema import DictSchema, ItemSchema, ListSchema
 
 
 class OngoingPage(ListSchema):
@@ -12,17 +12,9 @@ class OngoingPage(ListSchema):
 
     __SPLIT_DOC__ = D().css_all(".border-bottom-0.cursor-pointer")
 
-    url = (
-        D()
-        .attr("onclick")
-        .lstrip("location.href=")
-        .strip("'")
-        .format("https://animego.org{{}}")
-    )
+    url = D().attr("onclick").lstrip("location.href=").strip("'").format("https://animego.org{{}}")
     title = D().css(".last-update-title").text()
-    thumbnail = (
-        D().css(".lazy").attr("style").lstrip("background-image: url(").rstrip(");")
-    )
+    thumbnail = D().css(".lazy").attr("style").lstrip("background-image: url(").rstrip(");")
     episode = D().css(".text-truncate").text().re("(\d+)\s")
     dub = D().css(".text-gray-dark-6").text().replace(")", "").replace("(", "")
 
@@ -63,7 +55,7 @@ class AnimePage(ItemSchema):
     """
 
     title = D().css(".anime-title h1").text()
-    description = D().css_all(".description").text().join(" ").re_sub(r'^\s+|\s+$', "")
+    description = D().css_all(".description").text().join(" ").re_sub(r"^\s+|\s+$", "")
     thumbnail = D().css("#content img").attr("src")
     # anime id required for next requests (for DubberView, Source schemas)
     id = D().css(".br-2 .my-list-anime").attr("id").lstrip("my-list-")
@@ -78,7 +70,7 @@ class EpisodeDubbersView(DictSchema):
     __SIGNATURE__ = {"<dubber_id>": "<dubber_name>", "<id>": "..."}
 
     __KEY__ = D().attr("data-dubbing")
-    __VALUE__ = D().css("span").text().re_sub(r'^\s+|\s+$', "")
+    __VALUE__ = D().css("span").text().re_sub(r"^\s+|\s+$", "")
 
 
 class EpisodesView(ListSchema):
@@ -117,10 +109,10 @@ class SourceVideoView(ListSchema):
 
 
 class SourceDubbersView(DictSchema):
-    __SPLIT_DOC__ = D().css_all('#video-dubbing > span')
+    __SPLIT_DOC__ = D().css_all("#video-dubbing > span")
     __SIGNATURE__ = {"<dubber_id>": "<dubber_name>", "...": "..."}
 
-    __KEY__ = D().attr('data-dubbing')
+    __KEY__ = D().attr("data-dubbing")
     __VALUE__ = D().text().re_sub(r"^\s+", "").re_sub(r"\s+$", "")
 
 

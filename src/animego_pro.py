@@ -1,7 +1,7 @@
 from typing import Optional, Sequence
 
-from ssc_codegen.schema import DictSchema, ItemSchema, ListSchema
 from ssc_codegen.document import D, N
+from ssc_codegen.schema import DictSchema, ItemSchema, ListSchema
 
 
 class OngoingPage(ListSchema):
@@ -15,13 +15,7 @@ class OngoingPage(ListSchema):
     url = D().css(".card .card__title > a").attr("href")
     title = D().css(".card .card__title > a").text()
     # maybe returns `animego-online.org` src link - path this"""
-    thumbnail = (
-        D()
-        .css(".card img")
-        .attr("src")
-        .lstrip("https://animego-online.org")
-        .format("https://animego.pro{{}}")
-    )
+    thumbnail = D().css(".card img").attr("src").lstrip("https://animego-online.org").format("https://animego.pro{{}}")
 
 
 class SearchPage(OngoingPage):
@@ -30,6 +24,7 @@ class SearchPage(OngoingPage):
     POST https://animego.pro
     do=search&subaction=search&story=QUERY
     """
+
     pass
 
 
@@ -58,9 +53,9 @@ class AnimePage(ItemSchema):
 
 
 class EpisodeDubbersView(DictSchema):
-    __SPLIT_DOC__ = D().css_all('#translators-list > li')
+    __SPLIT_DOC__ = D().css_all("#translators-list > li")
 
-    __KEY__ = D().attr('data-this_translator')
+    __KEY__ = D().attr("data-this_translator")
     __VALUE__ = D().text()
 
 
@@ -80,6 +75,7 @@ class EpisodesPage(ItemSchema):
         POST https://animego.pro/engine/ajax/controller.php?mod=kodik_playlist_ajax
         news_id=6240&action=load_player
     """
+
     dubbers: EpisodeDubbersView = N().sub_parser(EpisodeDubbersView)
     #  first player url. Required for extract episodes"
     #
@@ -91,25 +87,25 @@ class EpisodesPage(ItemSchema):
 
 
 class SourceKodikEpisodesView(ListSchema):
-    __SPLIT_DOC__ = D().css_all('.serial-series-box > select > option')
+    __SPLIT_DOC__ = D().css_all(".serial-series-box > select > option")
 
-    value = D().attr('value')
-    data_id = D().attr('data-id')
-    data_hash = D().attr('data-hash')
-    data_title = D().attr('data-title').trim(' ')
+    value = D().attr("value")
+    data_id = D().attr("data-id")
+    data_hash = D().attr("data-hash")
+    data_title = D().attr("data-title").trim(" ")
 
 
 class SourceKodikTranslationsView(ListSchema):
-    __SPLIT_DOC__ = D().css_all('.serial-translations-box > select > option')
+    __SPLIT_DOC__ = D().css_all(".serial-translations-box > select > option")
 
-    value = D().attr('value')
-    data_id = D().attr('data-id')
-    data_translation_type = D().attr('data-translation-type')
-    data_media_id = D().attr('data-media-id')
-    data_media_hash = D().attr('data-media-hash')
-    data_media_type = D().attr('data-media-type')
-    data_title = D().attr('data-title')
-    data_episode_count = D().attr('data-episode-count')
+    value = D().attr("value")
+    data_id = D().attr("data-id")
+    data_translation_type = D().attr("data-translation-type")
+    data_media_id = D().attr("data-media-id")
+    data_media_hash = D().attr("data-media-hash")
+    data_media_type = D().attr("data-media-type")
+    data_title = D().attr("data-title")
+    data_episode_count = D().attr("data-episode-count")
 
 
 class SourceKodikSerialPage(ItemSchema):
