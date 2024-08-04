@@ -65,6 +65,7 @@ class KodikPage(ItemSchema):
         - kodik maybe have another netloc (e.g.: anivod)
         - 403 Forbidden if request sent not from CIS region
         - 404 DELETED: eg: https://kodik.info/seria/310427/09985563d891b56b1e9b01142ae11872/720p
+        - 500 Internal server error: eg: https://kodik.info/seria/1051016/af405efc5e061f5ac344d4811de3bc16/720p ('Cyberpunk: Edgerunners' ep5 Anilibria dub)
 
     """
 
