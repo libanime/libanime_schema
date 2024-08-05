@@ -55,7 +55,9 @@ class AnimePage(ItemSchema):
     """
 
     title = D().css(".anime-title h1").text()
-    description = D().css_all(".description").text().join(" ").re_sub(r"^\s+|\s+$", "")
+    # maybe missing description eg:
+    # https://animego.org/anime/chelovek-muskul-2589
+    description = D().default('').css_all(".description").text().join('').re_sub(r"^\s+|\s+$", "")
     thumbnail = D().css("#content img").attr("src")
     # anime id required for next requests (for DubberView, Source schemas)
     id = D().css(".br-2 .my-list-anime").attr("id").lstrip("my-list-")
