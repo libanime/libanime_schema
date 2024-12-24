@@ -1,20 +1,22 @@
 from typing import List, Optional, Sequence
 
-from ssc_codegen.document import D, N
-from ssc_codegen.schema import DictSchema, ItemSchema, ListSchema
+from ssc_codegen import D, N, DictSchema, ItemSchema, ListSchema
+
+# old domain - animego.org
+URL_FMT = "https://animego.me" + "{{}}"
 
 
 class OngoingPage(ListSchema):
     """Get all available ongoings from the main page
 
-    GET https://animego.org
+    GET https://animego.me
     """
 
     __SPLIT_DOC__ = D().css_all(".border-bottom-0.cursor-pointer")
 
-    url = D().attr("onclick").lstrip("location.href=").strip("'").format("https://animego.org{{}}")
+    url = D().attr("onclick").ltrim("location.href=").trim("'").format(URL_FMT)
     title = D().css(".last-update-title").text()
-    thumbnail = D().css(".lazy").attr("style").lstrip("background-image: url(").rstrip(");")
+    thumbnail = D().css(".lazy").attr("style").ltrim("background-image: url(").rtrim(");")
     episode = D().css(".text-truncate").text().re("(\d+)\s")
     dub = D().css(".text-gray-dark-6").text().replace(")", "").replace("(", "")
 
@@ -24,12 +26,12 @@ class SearchPage(ListSchema):
 
     USAGE:
 
-        GET https://animego.org/search/anime
+        GET https://animego.me/search/anime
         q={QUERY}
 
     EXAMPLE:
 
-        GET https://animego.org/search/anime?q=LAIN
+        GET https://animego.me/search/anime?q=LAIN
     """
 
     __SPLIT_DOC__ = D().css_all(".row > .col-ul-2")
@@ -47,11 +49,11 @@ class AnimePage(ItemSchema):
 
     USAGE:
 
-        GET https://animego.org/anime/<ANIME_PATH>
+        GET https://animego.me/anime/<ANIME_PATH>
 
     EXAMPLE:
 
-        GET https://animego.org/anime/eksperimenty-leyn-1114
+        GET https://animego.me/anime/eksperimenty-leyn-1114
     """
 
     title = D().css(".anime-title h1").text()
@@ -60,7 +62,7 @@ class AnimePage(ItemSchema):
     description = D().default('').css_all(".description").text().join('').re_sub(r"^\s+|\s+$", "")
     thumbnail = D().css("#content img").attr("src")
     # anime id required for next requests (for DubberView, Source schemas)
-    id = D().css(".br-2 .my-list-anime").attr("id").lstrip("my-list-")
+    id = D().css(".br-2 .my-list-anime").attr("id").ltrim("my-list-")
 
     # DEV key: for parse extra metadata can be json unmarshal.
     # unescape required
@@ -88,17 +90,17 @@ class EpisodePage(ItemSchema):
 
     Prepare:
       1. get id from Anime object
-      2. GET 'https://animego.org/anime/{Anime.id}/player?_allow=true'
+      2. GET 'https://animego.me/anime/{Anime.id}/player?_allow=true'
       3. extract html from json by ['content'] key
       4. OPTIONAL: unescape HTML
 
     EXAMPLE:
 
-        GET https://animego.org/anime/anime/1114//player?_allow=true
+        GET https://animego.me/anime/anime/1114//player?_allow=true
     """
 
-    dubbers: EpisodeDubbersView = N().sub_parser(EpisodeDubbersView)
-    episodes: EpisodesView = N().sub_parser(EpisodesView)
+    dubbers = N().sub_parser(EpisodeDubbersView)
+    episodes = N().sub_parser(EpisodesView)
 
 
 class SourceVideoView(ListSchema):
@@ -126,7 +128,7 @@ class SourcePage(ItemSchema):
 
       2.
 
-      GET https://animego.org/anime/series
+      GET https://animego.me/anime/series
       dubbing=2&provider=24&episode={Episode.num}id={Episode.id}
 
       3. extract html from json by ["content"] key
@@ -135,8 +137,8 @@ class SourcePage(ItemSchema):
 
     EXAMPLE:
 
-        GET https://animego.org/anime/series?dubbing=2&provider=24&episode=2&id=15837
+        GET https://animego.me/anime/series?dubbing=2&provider=24&episode=2&id=15837
     """
 
-    dubbers: SourceDubbersView = N().sub_parser(SourceDubbersView)
-    videos: list[SourceVideoView] = N().sub_parser(SourceVideoView)
+    dubbers = N().sub_parser(SourceDubbersView)
+    videos = N().sub_parser(SourceVideoView)

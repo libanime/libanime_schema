@@ -1,5 +1,4 @@
-from ssc_codegen.document import D, N
-from ssc_codegen.schema import DictSchema, ItemSchema, ListSchema
+from ssc_codegen import D, N, DictSchema, ItemSchema, ListSchema
 
 
 class OngoingPage(ListSchema):

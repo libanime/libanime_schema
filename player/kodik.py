@@ -89,7 +89,7 @@ class KodikPage(ItemSchema):
     # contains keys:
     # ['d', 'd_sign', 'pd', 'pd_sign', 'ref', 'ref_sign', 'advert_debug', 'first_url']
     url_params = R().re("var\s*urlParams\s*=\s*['\"](\{.*\})['\"]")
-    api_payload: KodikAPIPayload = N().sub_parser(KodikAPIPayload)
+    api_payload = N().sub_parser(KodikAPIPayload)
 
     # kodik sometimes changes the API path. It must be extracted from the player source code
     # (netloc excluded)
@@ -97,7 +97,7 @@ class KodikPage(ItemSchema):
     player_js_path = R().re('<script\s*type="text/javascript"\s*src="(/assets/js/app\.player_single.*?)">')
 
     # TODO: maybe add extra information?
-    movie_translations: MovieTranslationsPanel = N().default(None).sub_parser(MovieTranslationsPanel)
+    movie_translations = N().sub_parser(MovieTranslationsPanel)
 
 
 # TODO create function signature

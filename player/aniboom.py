@@ -69,14 +69,14 @@ class AniboomPage(ItemSchema):
     # "platform":"Linux","rating":"16+","nshowbl":false,"limitRate":false,
     # "aBlocklimitRate":false}
     data_parameters = (
-        D().css("#video").attr("data-parameters").replace("\\", "").replace("&quot;", '"')  # json unescape
+        D().css("#video").attr("data-parameters").repl("\\", "").repl("&quot;", '"')  # json unescape
     )
     hls = (
         D()
         .css("#video")
         .attr("data-parameters")
-        .replace("\\", "")
-        .replace("&quot;", '"')
+        .repl("\\", "")
+        .repl("&quot;", '"')
         .re('"hls":"{"src":"(https?.*?\.m3u8)"')
     )
 
@@ -84,7 +84,7 @@ class AniboomPage(ItemSchema):
         D()
         .css("#video")
         .attr("data-parameters")
-        .replace("\\", "")
-        .replace("&quot;", '"')
+        .repl("\\", "")
+        .repl("&quot;", '"')
         .re('"dash":"{"src":"(https?.*?\.(?:mpd|m3u8))"')
     )

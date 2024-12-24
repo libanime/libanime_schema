@@ -1,7 +1,5 @@
-from typing import List, Optional, Sequence
 
-from ssc_codegen.document import D, N
-from ssc_codegen.schema import DictSchema, ItemSchema, ListSchema
+from ssc_codegen import D, N, DictSchema, ItemSchema, ListSchema
 
 
 class OngoingPage(ListSchema):
@@ -23,7 +21,7 @@ class OngoingPage(ListSchema):
     #         <br>
     #         14 фильмов
     # </div>
-    counts = D().css_all(".aailines").text().strip("\r\n").join(" ")
+    counts = D().css_all(".aailines").text().trim("\r\n").join(" ")
 
 
 class SearchPage(OngoingPage):
@@ -42,7 +40,7 @@ class SearchPage(OngoingPage):
 class EpisodesView(ListSchema):
     __SPLIT_DOC__ = D().css_all(".video")
 
-    title = D().text().strip(" ")
+    title = D().text().trim(" ")
     url = D().attr("href").format("https://jut.su{{}}")
 
 
@@ -62,13 +60,13 @@ class AnimePage(ItemSchema):
     # background: url('https://gen.jut.su/uploads/animethumbs/anime_toradora.jpg') no-repeat; background-size: 104px auto;
     thumbnail = D().css(".all_anime_title").attr("style").re("'(https?://.*?)'")
 
-    episodes: EpisodesView = N().sub_parser(EpisodesView)
+    episodes = N().sub_parser(EpisodesView)
 
 
 class SourceView(DictSchema):
-
     __SPLIT_DOC__ = D().css_all("#my-player > source")
     __SIGNATURE__ = {"QUALITY": "URL"}
+
     __KEY__ = D().default("null").attr("res")
     __VALUE__ = D().default(None).attr("src")
 
@@ -105,4 +103,4 @@ class SourcePage(ItemSchema):
         - 'block_video_text_str\\\+' - К сожалению, в России это видео недоступно.
     """
 
-    videos: SourceView = N().sub_parser(SourceView)
+    videos = N().sub_parser(SourceView)

@@ -1,5 +1,4 @@
-from ssc_codegen.document import D, N
-from ssc_codegen.schema import DictSchema, ItemSchema, ListSchema
+from ssc_codegen import D, ItemSchema, ListSchema, R
 
 
 class OngoingPage(ListSchema):
@@ -87,4 +86,4 @@ class PlaylistURLPage(ItemSchema):
     # <script>var player = new Playerjs({id:"player",file:"/v/list/....txt"});
     # ...
     # extract URL PATH -----------------------------------vvvvv
-    playlist_url = D().raw().re(r"var\s*player\s*=[^>]+file:[\"']([^>]+)[\"']").format("https://sameband.studio{{}}")
+    playlist_url = R().re(r"var\s*player\s*=[^>]+file:[\"']([^>]+)[\"']").format("https://sameband.studio{{}}")

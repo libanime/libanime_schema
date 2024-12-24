@@ -1,7 +1,4 @@
-from typing import Optional, Sequence
-
-from ssc_codegen.document import D, N
-from ssc_codegen.schema import DictSchema, ItemSchema, ListSchema
+from ssc_codegen import D, N, DictSchema, ItemSchema, ListSchema
 
 
 class OngoingPage(ListSchema):
@@ -15,7 +12,7 @@ class OngoingPage(ListSchema):
     url = D().css(".card .card__title > a").attr("href")
     title = D().css(".card .card__title > a").text()
     # maybe returns `animego-online.org` src link - path this"""
-    thumbnail = D().css(".card img").attr("src").lstrip("https://animego-online.org").format("https://animego.pro{{}}")
+    thumbnail = D().css(".card img").attr("src").ltrim("https://animego-online.org").format("https://animego.pro{{}}")
 
 
 class SearchPage(OngoingPage):
@@ -24,7 +21,6 @@ class SearchPage(OngoingPage):
     POST https://animego.pro
     do=search&subaction=search&story=QUERY
     """
-
     pass
 
 
@@ -45,7 +41,7 @@ class AnimePage(ItemSchema):
         D()
         .css(".pmovie__poster > img")
         .attr("src")
-        .lstrip("https://animego-online.org")
+        .ltrim("https://animego-online.org")
         .format("https://animego.pro{{}}")
     )
     # id required for next requests (for EpisodesView)
@@ -76,7 +72,7 @@ class EpisodesPage(ItemSchema):
         news_id=6240&action=load_player
     """
 
-    dubbers: EpisodeDubbersView = N().sub_parser(EpisodeDubbersView)
+    dubbers = N().sub_parser(EpisodeDubbersView)
     #  first player url. Required for extract episodes"
     #
     #     Eg LINK signature:
@@ -116,5 +112,5 @@ class SourceKodikSerialPage(ItemSchema):
         - GET 'https://kodik.info/serial/58496/d2a8737db86989de0863bac5c14ce18b/720p?translations=false&only_translations=1895'
     """
 
-    episodes: SourceKodikEpisodesView = N().sub_parser(SourceKodikEpisodesView)
-    translations: SourceKodikTranslationsView = N().sub_parser(SourceKodikTranslationsView)
+    episodes = N().sub_parser(SourceKodikEpisodesView)
+    translations = N().sub_parser(SourceKodikTranslationsView)
