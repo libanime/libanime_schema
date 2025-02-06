@@ -85,5 +85,5 @@ class PlaylistURLPage(ItemSchema):
     # ...
     # <script>var player = new Playerjs({id:"player",file:"/v/list/....txt"});
     # ...
-    # extract URL PATH -----------------------------------vvvvv
-    playlist_url = R().re(r"var\s*player\s*=[^>]+file:[\"']([^>]+)[\"']").fmt("https://sameband.studio{{}}")
+    playlist_url = R().re(r"Playerjs[^>]+file:\s*[\"']([^>]+)[\"']").repl(' ', '_').fmt("https://sameband.studio{{}}")
+    # note: urlpath maybe contains whitespace instead `_` char in, fix it^^^^^^
