@@ -18,7 +18,7 @@ class OngoingPage(ListSchema):
     title = D().css(".last-update-title").text()
     thumbnail = D().css(".lazy").attr("style").ltrim("background-image: url(").rtrim(");")
     episode = D().css(".text-truncate").text().re("(\d+)\s")
-    dub = D().css(".text-gray-dark-6").text().replace(")", "").replace("(", "")
+    dub = D().css(".text-gray-dark-6").text().repl(")", "").repl("(", "")
 
 
 class SearchPage(ListSchema):

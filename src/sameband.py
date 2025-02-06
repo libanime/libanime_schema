@@ -8,7 +8,7 @@ class OngoingPage(ListSchema):
 
     url = D().css("a").attr("href")
     title = D().css(".col-auto .poster").attr("title")
-    thumbnail = D().css("img.swiper-lazy").attr("src").format("https://sameband.studio{{}}")
+    thumbnail = D().css("img.swiper-lazy").attr("src").fmt("https://sameband.studio{{}}")
 
 
 class SearchPage(ListSchema):
@@ -27,7 +27,7 @@ class SearchPage(ListSchema):
     __SPLIT_DOC__ = D().css_all(".col-auto")
 
     title = D().css(".col-auto .poster").attr("title")
-    thumbnail = D().css("img.swiper-lazy").attr("src").format("https://sameband.studio{{}}")
+    thumbnail = D().css("img.swiper-lazy").attr("src").fmt("https://sameband.studio{{}}")
     url = D().css(".image").attr("href")
 
 
@@ -43,7 +43,7 @@ class AnimePage(ItemSchema):
     title = D().css("h1.m-0").text()
     alt_title = D().css(".help").text()
     description = D().css_all(".limiter span").text().join(" ")
-    thumbnail = D().css(".image > img").attr("src").format("https://sameband.studio{{}}")
+    thumbnail = D().css(".image > img").attr("src").fmt("https://sameband.studio{{}}")
     # url for access playlist
     #
     #  tag signature:
@@ -53,7 +53,7 @@ class AnimePage(ItemSchema):
     #  <script>var player = new Playerjs({id:"player",file:"/v/list/....txt"});
     # </script>
     # </body>
-    player_url = D().css(".player > .player-content > iframe").attr("src").format("https://sameband.studio{{}}")
+    player_url = D().css(".player > .player-content > iframe").attr("src").fmt("https://sameband.studio{{}}")
 
 
 class PlaylistURLPage(ItemSchema):
@@ -86,4 +86,4 @@ class PlaylistURLPage(ItemSchema):
     # <script>var player = new Playerjs({id:"player",file:"/v/list/....txt"});
     # ...
     # extract URL PATH -----------------------------------vvvvv
-    playlist_url = R().re(r"var\s*player\s*=[^>]+file:[\"']([^>]+)[\"']").format("https://sameband.studio{{}}")
+    playlist_url = R().re(r"var\s*player\s*=[^>]+file:[\"']([^>]+)[\"']").fmt("https://sameband.studio{{}}")

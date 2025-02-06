@@ -46,7 +46,7 @@ class EpisodeView(ListSchema):
 
     __SPLIT_DOC__ = D().css_all(".episodes-slick_item")
 
-    url = D().css("a").attr("href").format("https://sovetromantica.com{{}}")
+    url = D().css("a").attr("href").fmt("https://sovetromantica.com{{}}")
     thumbnail = D().css("img").attr("src")
     title = D().css("img").attr("alt")
 
@@ -67,7 +67,7 @@ class AnimePage(ItemSchema):
 
     title = D().css(".anime-name .block--container").text()
     description = D().default(None).css("#js-description_open-full").text()
-    thumbnail = D().css("#poster").attr("src").format("https://sovetromantica.com{{}}")
+    thumbnail = D().css("#poster").attr("src").fmt("https://sovetromantica.com{{}}")
     # video signature:
     # var config={ "id":"sovetromantica_player",
     # "file":[ { "title":"123", "file":"https://.../subtitles/episode_1/episode_1.m3u8" } ,
