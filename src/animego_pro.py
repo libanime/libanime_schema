@@ -12,7 +12,7 @@ class OngoingPage(ListSchema):
     url = D().css(".card .card__title > a").attr("href")
     title = D().css(".card .card__title > a").text()
     # maybe returns `animego-online.org` src link - path this"""
-    thumbnail = D().css(".card img").attr("src").ltrim("https://animego-online.org").format("https://animego.pro{{}}")
+    thumbnail = D().css(".card img").attr("src").ltrim("https://animego-online.org").fmt("https://animego.pro{{}}")
 
 
 class SearchPage(OngoingPage):
@@ -42,7 +42,7 @@ class AnimePage(ItemSchema):
         .css(".pmovie__poster > img")
         .attr("src")
         .ltrim("https://animego-online.org")
-        .format("https://animego.pro{{}}")
+        .fmt("https://animego.pro{{}}")
     )
     # id required for next requests (for EpisodesView)
     news_id = D().css("#kodik_player_ajax").attr("data-news_id")
@@ -79,7 +79,7 @@ class EpisodesPage(ItemSchema):
     #               data-id vvvv       data-hash                                                          dubber_id
     #                       vvvv       vvvvv                                                                vvvv
     # '//kodik.info/serial/56520/fd227df3f52d477c793a58f4c99ee4f2/720p?translations=false&only_translations=28220'
-    player_url = D().css("#player_kodik > iframe").attr("src").format("https:{{}}")
+    player_url = D().css("#player_kodik > iframe").attr("src").fmt("https:{{}}")
 
 
 class SourceKodikEpisodesView(ListSchema):

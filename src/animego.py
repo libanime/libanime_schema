@@ -1,5 +1,3 @@
-from typing import List, Optional, Sequence
-
 from ssc_codegen import D, N, DictSchema, ItemSchema, ListSchema
 
 # old domain - animego.org
@@ -14,7 +12,7 @@ class OngoingPage(ListSchema):
 
     __SPLIT_DOC__ = D().css_all(".border-bottom-0.cursor-pointer")
 
-    url = D().attr("onclick").ltrim("location.href=").trim("'").format(URL_FMT)
+    url = D().attr("onclick").ltrim("location.href=").trim("'").fmt(URL_FMT)
     title = D().css(".last-update-title").text()
     thumbnail = D().css(".lazy").attr("style").ltrim("background-image: url(").rtrim(");")
     episode = D().css(".text-truncate").text().re("(\d+)\s")
@@ -107,7 +105,7 @@ class SourceVideoView(ListSchema):
     __SPLIT_DOC__ = D().css_all("#video-players > span")
 
     title = D().text()
-    url = D().attr("data-player").format("https:{{}}")
+    url = D().attr("data-player").fmt("https:{{}}")
     data_provider = D().attr("data-provider")
     data_provide_dubbing = D().attr("data-provide-dubbing")
 

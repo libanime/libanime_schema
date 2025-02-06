@@ -37,7 +37,7 @@ class AnimePage(ItemSchema):
     """
     title = D().css("h3").text()
     description = D().default(None).css(".postDesc").text()
-    thumbnail = D().css(".details_poster img").attr("src").format("https:{{}}")
+    thumbnail = D().css(".details_poster img").attr("src").fmt("https:{{}}")
 
     player_js_encoded = R().re(r'new Playerjs\("(.*?)"\)')
     player_js_url = R().re(r'<script[^>]+src="(/js/playerjs.*?)"').fmt(FMT_URL)
