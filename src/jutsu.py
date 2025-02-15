@@ -12,7 +12,7 @@ class OngoingPage(ListSchema):
 
     __SPLIT_DOC__ = D().css_all(".all_anime_global")
 
-    url = D().css("a").attr("href").format("https://jut.su{{}}")
+    url = D().css("a").attr("href").fmt("https://jut.su{{}}")
     title = D().css(".aaname").text()
     # background: url('https://gen.jut.su/uploads/animethumbs/aaaa.jpg')  no-repeat;
     thumbnail = D().css(".all_anime_image").attr("style").re("'(https?://.*?)'")
@@ -41,7 +41,7 @@ class EpisodesView(ListSchema):
     __SPLIT_DOC__ = D().css_all(".video")
 
     title = D().text().trim(" ")
-    url = D().attr("href").format("https://jut.su{{}}")
+    url = D().attr("href").fmt("https://jut.su{{}}")
 
 
 class AnimePage(ItemSchema):
