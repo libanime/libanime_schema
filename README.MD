@@ -1,9 +1,9 @@
 # libanime codegen
 
-Эта библиотека содержит конфигурации для генерации структур-вебпарсеров при помощи [selector-schema-codegen](https://github.com/vypivshiy/selector_schema_codegen) 
+Конфигурации для генерации структур-вебпарсеров при помощи [selector-schema-codegen](https://github.com/vypivshiy/selector_schema_codegen) 
 
-- src - конфигурации парсеров для источников
-- player - конфигурации парсеров для плееров
+- configs/src - конфигурации парсеров для источников
+- configs/player - конфигурации парсеров для плееров
 
 ## Usage
 
@@ -14,15 +14,15 @@ ssc_gen <language> ...FILES/FOLDER -i [parser lib backend] -o [output_path]
 
 ```shell
 # python (bs4)
-ssc_gen py src -i bs4 -o output
+ssc_gen py configs/src -i bs4 -o output
 # python (parsel)
-ssc_gen py src -i parsel -o output
+ssc_gen py configs/src -i parsel -o output
 # dart (universal_html)
-ssc_gen dart src -o output
+ssc_gen dart configs/src -o output
 # golang (goquery)
-ssc_gen go src -o output
+ssc_gen go configs/src -o output
 # js (ES6, pure)
-ssc_gen js src -o output
+ssc_gen js configs/src -o output
 ```
 
 ## Модификации и исправления
