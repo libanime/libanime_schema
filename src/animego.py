@@ -1,13 +1,13 @@
-from ssc_codegen import D, N, DictSchema, ItemSchema, ListSchema
+from ssc_codegen import D, N, DictSchema, ItemSchema, ListSchema, Json
 
 # old domain - animego.org
-URL_FMT = "https://animego.me" + "{{}}"
+URL_FMT = "https://animego.club" + "{{}}"
 
 
 class OngoingPage(ListSchema):
     """Get all available ongoings from the main page
 
-    GET https://animego.me
+    GET https://animego.club
     """
 
     __SPLIT_DOC__ = D().css_all(".border-bottom-0.cursor-pointer")
@@ -24,12 +24,12 @@ class SearchPage(ListSchema):
 
     USAGE:
 
-        GET https://animego.me/search/anime
+        GET https://animego.club/search/anime
         q={QUERY}
 
     EXAMPLE:
 
-        GET https://animego.me/search/anime?q=LAIN
+        GET https://animego.club/search/anime?q=LAIN
     """
 
     __SPLIT_DOC__ = D().css_all(".row > .col-ul-2")
@@ -39,6 +39,46 @@ class SearchPage(ListSchema):
     url = D().css(".text-truncate a").attr("href")
 
 
+# Anime page content
+###
+class AggregateRating(Json):
+    type: str
+    ratingCount: int
+    bestRating: int
+    ratingValue: str
+
+class Director(Json):
+    type: str
+    url: str
+    name: str
+
+class Actor(Json):
+    type: str
+    url: str
+    name: str
+
+class Creator(Json):
+    type: str
+    url: str
+    name: str
+
+class Content(Json):
+    context: str
+    type: str
+    url: str
+    name: str
+    contentRating: str
+    description: str
+    aggregateRating: AggregateRating
+    startDate: str
+    image: str
+    genre: list[str]
+    alternativeHeadline: list[str]
+    director: list[Director]
+    actor: list[Actor]
+    creator: list[Creator]
+###
+
 class AnimePage(ItemSchema):
     """Anime page information. anime path contains in SearchView.url or Ongoing.url
 
@@ -47,11 +87,11 @@ class AnimePage(ItemSchema):
 
     USAGE:
 
-        GET https://animego.me/anime/<ANIME_PATH>
+        GET https://animego.club/anime/<ANIME_PATH>
 
     EXAMPLE:
 
-        GET https://animego.me/anime/eksperimenty-leyn-1114
+        GET https://animego.club/anime/eksperimenty-leyn-1114
     """
 
     title = D().css(".anime-title h1").text()
@@ -64,7 +104,10 @@ class AnimePage(ItemSchema):
 
     # DEV key: for parse extra metadata can be json unmarshal.
     # unescape required
-    raw_json = D().css("script[type='application/ld+json']").text()
+    raw_json = (D().css("script[type='application/ld+json']").text()
+                # patch keys for success generating key
+                .repl('"@type"', '"type"').repl('"@context"', '"context"')
+                ).jsonify(Content)
 
 
 class EpisodeDubbersView(DictSchema):
@@ -86,19 +129,56 @@ class EpisodesView(ListSchema):
 class EpisodePage(ItemSchema):
     """Representation episodes
 
+    NOTE:
+        film pages does not exist video-carousel feature: test by `#video-carousel` CSS selector
+        or match by '<div id="video-carousel"' substring
+
     Prepare:
       1. get id from Anime object
-      2. GET 'https://animego.me/anime/{Anime.id}/player?_allow=true'
+      2. GET 'https://animego.club/anime/{Anime.id}/player?_allow=true'
       3. extract html from json by ['content'] key
       4. OPTIONAL: unescape HTML
 
     EXAMPLE:
-
-        GET https://animego.me/anime/anime/1114//player?_allow=true
+        GET https://animego.club/anime/anime/1114//player?_allow=true
     """
 
     dubbers = N().sub_parser(EpisodeDubbersView)
     episodes = N().sub_parser(EpisodesView)
+
+
+
+class EpisodeVideoPlayersView(ListSchema):
+    __SPLIT_DOC__ = D().css_all('#video-players > .mb-1')
+
+    player = D().attr("data-player").re_sub('^https?', '').fmt("https:{{}}")
+    data_provider = D().attr("data-provider")
+    data_provide_dubbing = D().attr("data-provide-dubbing").re_trim()
+
+
+class EpisodeVideoDubbersView(EpisodeDubbersView):
+    # same signature
+    pass
+
+
+class EpisodeVideoPage(ItemSchema):
+    """Represent Episode object for film (it have not same signatures)
+
+    NOTE:
+        film pages does not exist video-carousel feature: test by `#video-carousel` CSS selector
+        or match by '<div id="video-carousel"' substring
+
+    Prepare:
+      1. get id from Anime object
+      2. GET 'https://animego.club/anime/{Anime.id}/player?_allow=true'
+      3. extract html from json by ['content'] key
+      4. OPTIONAL: unescape HTML
+
+    EXAMPLE:
+        GET https://animego.club/anime/315/player?_allow=true
+    """
+    dubbers = N().sub_parser(EpisodeVideoDubbersView)
+    videos = N().sub_parser(EpisodeVideoPlayersView)
 
 
 class SourceVideoView(ListSchema):
@@ -126,7 +206,7 @@ class SourcePage(ItemSchema):
 
       2.
 
-      GET https://animego.me/anime/series
+      GET https://animego.club/anime/series
       dubbing=2&provider=24&episode={Episode.num}id={Episode.id}
 
       3. extract html from json by ["content"] key
@@ -135,7 +215,7 @@ class SourcePage(ItemSchema):
 
     EXAMPLE:
 
-        GET https://animego.me/anime/series?dubbing=2&provider=24&episode=2&id=15837
+        GET https://animego.club/anime/series?dubbing=2&provider=24&episode=2&id=15837
     """
 
     dubbers = N().sub_parser(SourceDubbersView)
