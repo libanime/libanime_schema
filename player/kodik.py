@@ -18,15 +18,15 @@ class KodikAPIPayload(ItemSchema):
     """payload for Kodik API request"""
 
     # single params pairs
-    d = R().re("var\s*domain\s+=\s+['\"](.*?)['\"];")
-    d_sign = R().re("var\s*d_sign\s+=\s+['\"](.*?)['\"];")
-    pd = R().re("var\s*pd\s+=\s+['\"](.*?)['\"];")
-    pd_sign = R().re("var\s*pd_sign\s+=\s+['\"](.*?)['\"];")
-    ref = R().re("var\s*ref\s+=\s+['\"](.*?)['\"];")
-    ref_sign = R().re("var\s*ref_sign\s+=\s+['\"](.*?)['\"];")
-    type = R().re("videoInfo\.type\s*=\s*['\"](.*?)['\"];")
-    hash = R().re("videoInfo\.hash\s*=\s*['\"](.*?)['\"];")
-    id = R().re("videoInfo\.id\s*=\s*['\"](.*?)['\"];")
+    d = R().re(r"var\s*domain\s+=\s+['\"](.*?)['\"];")
+    d_sign = R().re(r"var\s*d_sign\s+=\s+['\"](.*?)['\"];")
+    pd = R().re(r"var\s*pd\s+=\s+['\"](.*?)['\"];")
+    pd_sign = R().re(r"var\s*pd_sign\s+=\s+['\"](.*?)['\"];")
+    ref = R().re(r"var\s*ref\s+=\s+['\"](.*?)['\"];")
+    ref_sign = R().re(r"var\s*ref_sign\s+=\s+['\"](.*?)['\"];")
+    type = R().re(r"videoInfo\.type\s*=\s*['\"](.*?)['\"];")
+    hash = R().re(r"videoInfo\.hash\s*=\s*['\"](.*?)['\"];")
+    id = R().re(r"videoInfo\.id\s*=\s*['\"](.*?)['\"];")
 
 
 class SeasonBox(ListSchema):
@@ -94,7 +94,7 @@ class TranslationsBox(ListSchema):
     data_title = D().attr('data-title')
     # one-peace contains this value in "1~1122" format
     # fix it for avoid convert type issues
-    data_episode_count = D().attr('data-episode-count').re('(\d+)$')
+    data_episode_count = D().attr('data-episode-count').re(r'(\d+)$')
 
 
 class MainKodikMin(ItemSchema):
@@ -135,19 +135,14 @@ class MainKodikMin(ItemSchema):
 
 
     """
-    url_params = R().re("var\s*urlParams\s*=\s*['\"](\{.*\})['\"]").jsonify(UrlParams)
+    url_params = R().re(r"var\s*urlParams\s*=\s*['\"](\{.*\})['\"]").jsonify(UrlParams)
     api_payload = N().sub_parser(KodikAPIPayload)
     # required for extract valid player API path
-    player_js_path = R().re('<script\s*type="text/javascript"\s*src="(/assets/js/app\..*?)">')
+    player_js_path = R().re(r'<script\s*type="text/javascript"\s*src="(/assets/js/app\..*?)">')
 
 # FIXME: not works incoherence fields
 class MainKodikSerialPage(MainKodikMin):
     """first extract data entrypoint for kodik.../serial/ entrypoint path"""
-    # url_params = R().re("var\s*urlParams\s*=\s*['\"](\{.*\})['\"]").jsonify(UrlParams)
-    # api_payload = N().sub_parser(KodikAPIPayload)
-    # # required for extract valid player API path
-    # player_js_path = R().re('<script\s*type="text/javascript"\s*src="(/assets/js/app\..*?)">')
-
     thumbnails = (R().re(r'var\s*thumbnails\s*=\s*\[(.*?)\];')
                   .repl('"', '')
                   .split(',')
@@ -216,4 +211,4 @@ class MainKodikAPIPath(ItemSchema):
     # js api path signature examples:
     # ... $.ajax({type:"POST",url:atob("L2Z0b3I="),cache:! ...
     # ... $.ajax({type: 'POST', url:atob('L3RyaQ=='),cache: !...
-    api_path = R().re("\$\.ajax\([^>]+,url:\s*atob\([\"']([\w=]+)[\"']\)")
+    api_path = R().re(r"\$\.ajax\([^>]+,url:\s*atob\([\"']([\w=]+)[\"']\)")

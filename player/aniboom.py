@@ -92,7 +92,7 @@ class AniboomPage(ItemSchema):
         .attr("data-parameters")
         .repl("\\", "")
         .repl("&quot;", '"')
-        .re('"hls":"{"src":"(https?.*?\.m3u8)"')
+        .re(r'"hls":"{"src":"(https?.*?\.m3u8)"')
     )
 
     dash = (
@@ -101,5 +101,5 @@ class AniboomPage(ItemSchema):
         .attr("data-parameters")
         .repl("\\", "")
         .repl("&quot;", '"')
-        .re('"dash":"{"src":"(https?.*?\.(?:mpd|m3u8))"')
+        .re(r'"dash":"{"src":"(https?.*?\.(?:mpd|m3u8))"')
     )
