@@ -15,13 +15,13 @@ class OngoingPage(ListSchema):
     url = D().css("a").attr("href").fmt("https://jut.su{{}}")
     title = D().css(".aaname").text()
     # background: url('https://gen.jut.su/uploads/animethumbs/aaaa.jpg')  no-repeat;
-    thumbnail = D().css(".all_anime_image").attr("style").re("'(https?://.*?)'")
+    thumbnail = D().css(".all_anime_image[style]").attr("style").re("'(https?://.*?)'")
     # <div class="aailines">
     #         1094 серии
     #         <br>
     #         14 фильмов
     # </div>
-    counts = D().css_all(".aailines").text().trim("\r\n").join(" ")
+    counts = D().css_all(".aailines").text().trim("\r\n ").join(" ")
 
 
 class SearchPage(OngoingPage):
@@ -55,10 +55,10 @@ class AnimePage(ItemSchema):
     # test cases:
     # Смотреть Клинок, рассекающий демонов все серии и сезоны
     # Смотреть ТораДора все серии
-    title = D().css(".anime_padding_for_title").text().re("Смотреть (.*?) все")
+    title = D().css(".anime_padding_for_title").text().re(r"Смотреть\s*(.*?)\s*все")
     description = D().css_all(".uv_rounded_bottom span").text().join(" ")
     # background: url('https://gen.jut.su/uploads/animethumbs/anime_toradora.jpg') no-repeat; background-size: 104px auto;
-    thumbnail = D().css(".all_anime_title").attr("style").re("'(https?://.*?)'")
+    thumbnail = D().css(".all_anime_title[style]").attr("style").re("'(https?://.*?)'")
 
     episodes = N().sub_parser(EpisodesView)
 

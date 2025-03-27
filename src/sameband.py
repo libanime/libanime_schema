@@ -6,9 +6,9 @@ class OngoingPage(ListSchema):
 
     __SPLIT_DOC__ = D().css_all(".col-auto")
 
-    url = D().css("a").attr("href")
-    title = D().css(".col-auto .poster").attr("title")
-    thumbnail = D().css("img.swiper-lazy").attr("src").fmt("https://sameband.studio{{}}")
+    url = D().css("a[href]").attr("href")
+    title = D().css(".col-auto .poster[title]").attr("title")
+    thumbnail = D().css("img.swiper-lazy[src]").attr("src").fmt("https://sameband.studio{{}}")
 
 
 class SearchPage(ListSchema):
@@ -26,9 +26,9 @@ class SearchPage(ListSchema):
 
     __SPLIT_DOC__ = D().css_all(".col-auto")
 
-    title = D().css(".col-auto .poster").attr("title")
-    thumbnail = D().css("img.swiper-lazy").attr("src").fmt("https://sameband.studio{{}}")
-    url = D().css(".image").attr("href")
+    title = D().css(".col-auto .poster[title]").attr("title")
+    thumbnail = D().css("img.swiper-lazy[src]").attr("src").fmt("https://sameband.studio{{}}")
+    url = D().css(".image[href]").attr("href")
 
 
 class AnimePage(ItemSchema):
@@ -43,7 +43,7 @@ class AnimePage(ItemSchema):
     title = D().css("h1.m-0").text()
     alt_title = D().css(".help").text()
     description = D().css_all(".limiter span").text().join(" ")
-    thumbnail = D().css(".image > img").attr("src").fmt("https://sameband.studio{{}}")
+    thumbnail = D().css(".image > img[src]").attr("src").fmt("https://sameband.studio{{}}")
     # url for access playlist
     #
     #  tag signature:
@@ -53,7 +53,7 @@ class AnimePage(ItemSchema):
     #  <script>var player = new Playerjs({id:"player",file:"/v/list/....txt"});
     # </script>
     # </body>
-    player_url = D().css(".player > .player-content > iframe").attr("src").fmt("https://sameband.studio{{}}")
+    player_url = D().css(".player > .player-content > iframe[src]").attr("src").fmt("https://sameband.studio{{}}")
 
 
 class PlaylistURLPage(ItemSchema):

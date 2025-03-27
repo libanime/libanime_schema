@@ -1,12 +1,15 @@
 from ssc_codegen import D, DictSchema, ItemSchema, ListSchema, N, R, Json
 
+
 class Dash(Json):
     src: str
     type: str
 
+
 class Hls(Json):
     src: str
     type: str
+
 
 class DataParameters(Json):
     id: str
@@ -29,8 +32,11 @@ class DataParameters(Json):
     limitRate: bool
     aBlocklimitRate: bool
 
+
 class AniboomPage(ItemSchema):
     """Extract MPD and M3U8 urls
+
+    NOTE: use data_parameters instead hls and dash keys for get urls
 
     Required `referer="https://animego.org/` HEADER (.me, .club?)
 
@@ -68,12 +74,9 @@ class AniboomPage(ItemSchema):
         \"type\":\"application\\\/x-mpegURL\"}"
 
         ... }
-
-
-
     """
     data_parameters = (
-        D().css("#video").attr("data-parameters")
+        D().css("#video[data-parameters]").attr("data-parameters")
         # unescape json
         .repl("\\", "")
         .repl('&quot;}', '}')
@@ -97,7 +100,7 @@ class AniboomPage(ItemSchema):
 
     dash = (
         D()
-        .css("#video")
+        .css("#video[data-parameters]")
         .attr("data-parameters")
         .repl("\\", "")
         .repl("&quot;", '"')

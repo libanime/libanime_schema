@@ -1,5 +1,5 @@
 from ssc_codegen import ItemSchema, D, ListSchema
-
+import re
 
 FMT_URL = 'https://yummy-anime.org{{}}'
 
@@ -13,10 +13,10 @@ class OngoingPage(ListSchema):
     """
     __SPLIT_DOC__ = D().css_all('.ksupdate_block a')
 
-    thumbnail = D().css('.xfieldimage').attr('src').fmt(FMT_URL)
+    thumbnail = D().css('.xfieldimage[src]').attr('src').fmt(FMT_URL)
     url = D().attr('href').fmt(FMT_URL)
-    episode = D().css('.cell-2').text().re("(\d+)\s").to_int()
-    title = D().css('.xfieldimage').attr('alt')
+    episode = D().css('.cell-2').text().re(r"(\d+)\s").to_int()
+    title = D().css('.xfieldimage[alt]').attr('alt')
 
 
 class SearchPage(ListSchema):
@@ -36,7 +36,7 @@ class SearchPage(ListSchema):
     __SPLIT_DOC__ = D().css_all("a.has-overlay")
 
     title = D().css(".poster__title").text()
-    thumbnail = D().css(".xfieldimage").attr('data-src').fmt(FMT_URL)
+    thumbnail = D().css(".xfieldimage[data-src]").attr('data-src').fmt(FMT_URL)
     url = D().attr("href")
 
 
@@ -57,5 +57,5 @@ class AnimePage(ItemSchema):
     alt_title = D().default(None).css('.anime__title .pmovie__original-title').text()
 
     description = D().default('').css_all(".page__text p").text().join('')
-    thumbnail = D().css(".pmovie__poster .xfieldimage").attr("data-src").fmt(FMT_URL)
-    player_url = D().default(None).css('.pmovie__player iframe').attr('src').fmt('https:{{}}')
+    thumbnail = D().css(".pmovie__poster .xfieldimage[data-src]").attr("data-src").fmt(FMT_URL)
+    player_url = D().default(None).css('.pmovie__player iframe[src]').attr('src').fmt('https:{{}}')

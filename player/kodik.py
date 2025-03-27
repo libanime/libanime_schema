@@ -42,6 +42,7 @@ class SeasonBox(ListSchema):
     data_title = D().attr('data-title')
     data_translation_title = D().attr('data-translation-title')
 
+
 class SeriesBox(ListSchema):
     """represent selected series in current page"""
     # <option value="1" data-id="1258425" data-hash="3b688251930a4ebb3821be95d9a30362"
@@ -139,6 +140,7 @@ class MainKodikMin(ItemSchema):
     api_payload = N().sub_parser(KodikAPIPayload)
     # required for extract valid player API path
     player_js_path = R().re(r'<script\s*type="text/javascript"\s*src="(/assets/js/app\..*?)">')
+
 
 # FIXME: not works incoherence fields
 class MainKodikSerialPage(MainKodikMin):

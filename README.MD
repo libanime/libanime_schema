@@ -17,8 +17,6 @@ ssc_gen <language> ...FILES/FOLDER -i [parser lib backend] -o [output_path]
 ssc_gen py src -i bs4 -o output
 # python (parsel)
 ssc_gen py src -i parsel -o output
-# dart (universal_html)
-ssc_gen dart src -o output
 # golang (goquery)
 ssc_gen go src -o output
 # js (ES6, pure)

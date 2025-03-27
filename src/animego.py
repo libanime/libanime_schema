@@ -1,20 +1,20 @@
 from ssc_codegen import D, N, DictSchema, ItemSchema, ListSchema, Json
 
 # old domain - animego.org
-URL_FMT = "https://animego.club" + "{{}}"
+URL_FMT = "https://animego.one{{}}"
 
 
 class OngoingPage(ListSchema):
     """Get all available ongoings from the main page
 
-    GET https://animego.club
+    GET https://animego.one
     """
 
     __SPLIT_DOC__ = D().css_all(".border-bottom-0.cursor-pointer")
 
-    url = D().attr("onclick").ltrim("location.href=").trim("'").fmt(URL_FMT)
+    url = D().attr("onclick").rm_prefix("location.href=").trim("'").fmt(URL_FMT)
     title = D().css(".last-update-title").text()
-    thumbnail = D().css(".lazy").attr("style").ltrim("background-image: url(").rtrim(");")
+    thumbnail = D().css(".lazy[style]").attr("style").rm_prefix("background-image: url(").rtrim(");")
     episode = D().css(".text-truncate").text().re("(\d+)\s")
     dub = D().css(".text-gray-dark-6").text().repl(")", "").repl("(", "")
 
@@ -24,19 +24,19 @@ class SearchPage(ListSchema):
 
     USAGE:
 
-        GET https://animego.club/search/anime
+        GET https://animego.one/search/anime
         q={QUERY}
 
     EXAMPLE:
 
-        GET https://animego.club/search/anime?q=LAIN
+        GET https://animego.one/search/anime?q=LAIN
     """
 
     __SPLIT_DOC__ = D().css_all(".row > .col-ul-2")
 
-    title = D().css(".text-truncate a").attr("title")
-    thumbnail = D().css(".lazy").attr("data-original")
-    url = D().css(".text-truncate a").attr("href")
+    title = D().css(".text-truncate a[title]").attr("title")
+    thumbnail = D().css(".lazy[data-original]").attr("data-original")
+    url = D().css(".text-truncate a[href]").attr("href")
 
 
 # Anime page content
@@ -87,11 +87,11 @@ class AnimePage(ItemSchema):
 
     USAGE:
 
-        GET https://animego.club/anime/<ANIME_PATH>
+        GET https://animego.one/anime/<ANIME_PATH>
 
     EXAMPLE:
 
-        GET https://animego.club/anime/eksperimenty-leyn-1114
+        GET https://animego.one/anime/eksperimenty-leyn-1114
     """
 
     title = D().css(".anime-title h1").text()
@@ -135,12 +135,12 @@ class EpisodePage(ItemSchema):
 
     Prepare:
       1. get id from Anime object
-      2. GET 'https://animego.club/anime/{Anime.id}/player?_allow=true'
+      2. GET 'https://animego.one/anime/{Anime.id}/player?_allow=true'
       3. extract html from json by ['content'] key
       4. OPTIONAL: unescape HTML
 
     EXAMPLE:
-        GET https://animego.club/anime/anime/1114//player?_allow=true
+        GET https://animego.one/anime/anime/1114//player?_allow=true
     """
 
     dubbers = N().sub_parser(EpisodeDubbersView)
@@ -170,12 +170,12 @@ class EpisodeVideoPage(ItemSchema):
 
     Prepare:
       1. get id from Anime object
-      2. GET 'https://animego.club/anime/{Anime.id}/player?_allow=true'
+      2. GET 'https://animego.one/anime/{Anime.id}/player?_allow=true'
       3. extract html from json by ['content'] key
       4. OPTIONAL: unescape HTML
 
     EXAMPLE:
-        GET https://animego.club/anime/315/player?_allow=true
+        GET https://animego.one/anime/315/player?_allow=true
     """
     dubbers = N().sub_parser(EpisodeVideoDubbersView)
     videos = N().sub_parser(EpisodeVideoPlayersView)
@@ -206,7 +206,7 @@ class SourcePage(ItemSchema):
 
       2.
 
-      GET https://animego.club/anime/series
+      GET https://animego.one/anime/series
       dubbing=2&provider=24&episode={Episode.num}id={Episode.id}
 
       3. extract html from json by ["content"] key
@@ -215,7 +215,7 @@ class SourcePage(ItemSchema):
 
     EXAMPLE:
 
-        GET https://animego.club/anime/series?dubbing=2&provider=24&episode=2&id=15837
+        GET https://animego.one/anime/series?dubbing=2&provider=24&episode=2&id=15837
     """
 
     dubbers = N().sub_parser(SourceDubbersView)
