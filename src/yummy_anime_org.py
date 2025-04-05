@@ -15,7 +15,8 @@ class OngoingPage(ListSchema):
 
     thumbnail = D().css('.xfieldimage[src]').attr('src').fmt(FMT_URL)
     url = D().attr('href').fmt(FMT_URL)
-    episode = D().css('.cell-2').text().re(r"(\d+)\s").to_int()
+    # maybe not exist episode number in element, set 1 as default
+    episode = D().default(1).css('.cell-2').text().re(r"(\d+)\s").to_int()
     title = D().css('.xfieldimage[alt]').attr('alt')
 
 
