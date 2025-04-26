@@ -1,0 +1,1268 @@
+openapi: 3.0.0
+info:
+  title: flows Mitmproxy2Swagger
+  version: 1.0.0
+servers:
+- url: https://api.cdnlibs.org/api
+  description: The default server
+paths:
+  /anime:
+    options:
+      summary: OPTIONS anime
+      responses:
+        '200':
+          description: OK
+          content: {}
+      parameters:
+      - name: fields[]
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: site_id[]
+        in: query
+        required: false
+        schema:
+          type: number
+    get:
+      summary: GET anime
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        name:
+                          type: string
+                        rus_name:
+                          type: string
+                        eng_name:
+                          type: string
+                        model:
+                          type: string
+                        slug:
+                          type: string
+                        slug_url:
+                          type: string
+                        cover:
+                          type: object
+                          properties:
+                            filename:
+                              type: string
+                            thumbnail:
+                              type: string
+                            default:
+                              type: string
+                            md:
+                              type: string
+                        ageRestriction:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                            label:
+                              type: string
+                        site:
+                          type: number
+                        type:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                            label:
+                              type: string
+                        rating:
+                          type: object
+                          properties:
+                            average:
+                              type: string
+                            averageFormated:
+                              type: string
+                            votes:
+                              type: number
+                            votesFormated:
+                              type: string
+                            user:
+                              type: number
+                        status:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                            label:
+                              type: string
+                        releaseDateString:
+                          type: string
+                        shiki_rate:
+                          type: object
+                          nullable: true
+                  links:
+                    type: object
+                    properties:
+                      first:
+                        type: string
+                      last:
+                        type: object
+                        nullable: true
+                      prev:
+                        type: object
+                        nullable: true
+                      next:
+                        type: string
+                  meta:
+                    type: object
+                    properties:
+                      current_page:
+                        type: number
+                      from:
+                        type: number
+                      path:
+                        type: string
+                      per_page:
+                        type: number
+                      to:
+                        type: number
+                      seed:
+                        type: string
+      parameters:
+      - name: fields[]
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: site_id[]
+        in: query
+        required: false
+        schema:
+          type: number
+  /anime/316--serial-experiments-lain-anime:
+    options:
+      summary: OPTIONS 316--serial-experiments-lain-anime
+      responses:
+        '200':
+          description: OK
+          content: {}
+      parameters:
+      - name: fields[]
+        in: query
+        required: false
+        schema:
+          type: string
+    get:
+      summary: GET 316--serial-experiments-lain-anime
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      name:
+                        type: string
+                      rus_name:
+                        type: string
+                      eng_name:
+                        type: string
+                      otherNames:
+                        type: array
+                        items:
+                          type: string
+                      model:
+                        type: string
+                      slug:
+                        type: string
+                      slug_url:
+                        type: string
+                      cover:
+                        type: object
+                        properties:
+                          filename:
+                            type: string
+                          thumbnail:
+                            type: string
+                          default:
+                            type: string
+                          md:
+                            type: string
+                      background:
+                        type: object
+                        properties:
+                          filename:
+                            type: string
+                          url:
+                            type: string
+                      ageRestriction:
+                        type: object
+                        properties:
+                          id:
+                            type: number
+                          label:
+                            type: string
+                      site:
+                        type: number
+                      type:
+                        type: object
+                        properties:
+                          id:
+                            type: number
+                          label:
+                            type: string
+                      summary:
+                        type: string
+                      close_view:
+                        type: number
+                      releaseDate:
+                        type: string
+                      views:
+                        type: object
+                        properties:
+                          total:
+                            type: number
+                          short:
+                            type: string
+                          formated:
+                            type: string
+                      rating:
+                        type: object
+                        properties:
+                          average:
+                            type: string
+                          averageFormated:
+                            type: string
+                          votes:
+                            type: number
+                          votesFormated:
+                            type: string
+                          user:
+                            type: number
+                      is_licensed:
+                        type: boolean
+                      moderated:
+                        type: object
+                        properties:
+                          id:
+                            type: number
+                          label:
+                            type: string
+                      teams:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                            slug:
+                              type: string
+                            slug_url:
+                              type: string
+                            model:
+                              type: string
+                            name:
+                              type: string
+                            cover:
+                              type: object
+                              properties:
+                                filename:
+                                  type: object
+                                  nullable: true
+                                thumbnail:
+                                  type: string
+                                default:
+                                  type: string
+                                md:
+                                  type: string
+                            details:
+                              type: object
+                              properties:
+                                branch_id:
+                                  type: number
+                                is_active:
+                                  type: number
+                                subscriptions_count:
+                                  type: object
+                                  nullable: true
+                            donate_enabled:
+                              type: object
+                              nullable: true
+                      genres:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                            name:
+                              type: string
+                            adult:
+                              type: boolean
+                            alert:
+                              type: boolean
+                      tags:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                            name:
+                              type: string
+                            adult:
+                              type: boolean
+                            alert:
+                              type: boolean
+                      publisher:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                            slug:
+                              type: string
+                            slug_url:
+                              type: string
+                            model:
+                              type: string
+                            name:
+                              type: string
+                            rus_name:
+                              type: object
+                              nullable: true
+                            cover:
+                              type: object
+                              properties:
+                                filename:
+                                  type: object
+                                  nullable: true
+                                thumbnail:
+                                  type: string
+                                default:
+                                  type: string
+                                md:
+                                  type: string
+                            subscription:
+                              type: object
+                              properties:
+                                is_subscribed:
+                                  type: boolean
+                                source_type:
+                                  type: string
+                                source_id:
+                                  type: number
+                                relation:
+                                  type: object
+                                  nullable: true
+                      franchise:
+                        type: array
+                        items: {}
+                      authors:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                            slug:
+                              type: string
+                            slug_url:
+                              type: string
+                            model:
+                              type: string
+                            name:
+                              type: string
+                            rus_name:
+                              type: object
+                              nullable: true
+                            alt_name:
+                              type: object
+                              nullable: true
+                            cover:
+                              type: object
+                              properties:
+                                filename:
+                                  type: string
+                                thumbnail:
+                                  type: string
+                                default:
+                                  type: string
+                                md:
+                                  type: string
+                            subscription:
+                              type: object
+                              properties:
+                                is_subscribed:
+                                  type: boolean
+                                source_type:
+                                  type: string
+                                source_id:
+                                  type: number
+                                relation:
+                                  type: object
+                                  nullable: true
+                            confirmed:
+                              type: object
+                              nullable: true
+                            user_id:
+                              type: number
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: number
+                          username:
+                            type: string
+                          avatar:
+                            type: object
+                            properties:
+                              filename:
+                                type: string
+                              url:
+                                type: string
+                          last_online_at:
+                            type: object
+                            nullable: true
+                          premium:
+                            type: object
+                            properties:
+                              enabled:
+                                type: boolean
+                      metadata:
+                        type: object
+                        properties:
+                          close_comments:
+                            type: number
+                          comments_disabled:
+                            type: object
+                            properties:
+                              media:
+                                type: boolean
+                              content:
+                                type: boolean
+                          count:
+                            type: object
+                            properties:
+                              branches:
+                                type: number
+                              characters:
+                                type: object
+                                properties:
+                                  Main:
+                                    type: number
+                                  Supporting:
+                                    type: number
+                              reviews:
+                                type: object
+                                properties:
+                                  neutral:
+                                    type: number
+                                  positive:
+                                    type: number
+                                  negative:
+                                    type: number
+                                  all:
+                                    type: number
+                              relations:
+                                type: number
+                              people:
+                                type: number
+                              covers:
+                                type: number
+                      status:
+                        type: object
+                        properties:
+                          id:
+                            type: number
+                          label:
+                            type: string
+                      time:
+                        type: object
+                        properties:
+                          value:
+                            type: number
+                          formated:
+                            type: string
+                      items_count:
+                        type: object
+                        properties:
+                          uploaded:
+                            type: number
+                          total:
+                            type: number
+                      episodes_schedule:
+                        type: array
+                        items: {}
+                      releaseDateString:
+                        type: string
+                      shikimori_href:
+                        type: string
+                      shiki_rate:
+                        type: number
+                  meta:
+                    type: object
+                    properties:
+                      country:
+                        type: string
+      parameters:
+      - name: fields[]
+        in: query
+        required: false
+        schema:
+          type: string
+  /anime/316--serial-experiments-lain-anime/relations:
+    options:
+      summary: OPTIONS relations
+      responses:
+        '200':
+          description: OK
+          content: {}
+    get:
+      summary: GET relations
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        order:
+                          type: number
+                        related_type:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                            label:
+                              type: string
+                        media:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                            name:
+                              type: string
+                            rus_name:
+                              type: string
+                            eng_name:
+                              type: string
+                            model:
+                              type: string
+                            slug:
+                              type: string
+                            slug_url:
+                              type: string
+                            cover:
+                              type: object
+                              properties:
+                                filename:
+                                  type: string
+                                thumbnail:
+                                  type: string
+                                default:
+                                  type: string
+                                md:
+                                  type: string
+                            ageRestriction:
+                              type: object
+                              properties:
+                                id:
+                                  type: number
+                                label:
+                                  type: string
+                            site:
+                              type: number
+                            type:
+                              type: object
+                              properties:
+                                id:
+                                  type: number
+                                label:
+                                  type: string
+                            status:
+                              type: object
+                              properties:
+                                id:
+                                  type: number
+                                label:
+                                  type: string
+                            releaseDateString:
+                              type: string
+  /anime/316--serial-experiments-lain-anime/similar:
+    options:
+      summary: OPTIONS similar
+      responses:
+        '200':
+          description: OK
+          content: {}
+    get:
+      summary: GET similar
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        similar:
+                          type: string
+                        user_id:
+                          type: number
+                        media:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                            name:
+                              type: string
+                            rus_name:
+                              type: string
+                            eng_name:
+                              type: string
+                            model:
+                              type: string
+                            slug:
+                              type: string
+                            slug_url:
+                              type: string
+                            cover:
+                              type: object
+                              properties:
+                                filename:
+                                  type: string
+                                thumbnail:
+                                  type: string
+                                default:
+                                  type: string
+                                md:
+                                  type: string
+                            ageRestriction:
+                              type: object
+                              properties:
+                                id:
+                                  type: number
+                                label:
+                                  type: string
+                            site:
+                              type: number
+                            type:
+                              type: object
+                              properties:
+                                id:
+                                  type: number
+                                label:
+                                  type: string
+                            is_licensed:
+                              type: boolean
+                            status:
+                              type: object
+                              properties:
+                                id:
+                                  type: number
+                                label:
+                                  type: string
+                            releaseDateString:
+                              type: string
+                            shikimori_href:
+                              type: string
+                            shiki_rate:
+                              type: number
+                        votes:
+                          type: object
+                          properties:
+                            up:
+                              type: number
+                            down:
+                              type: number
+                            user:
+                              type: object
+                              nullable: true
+  /anime/316--serial-experiments-lain-anime/stats:
+    options:
+      summary: OPTIONS stats
+      responses:
+        '200':
+          description: OK
+          content: {}
+      parameters:
+      - name: bookmarks
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: rating
+        in: query
+        required: false
+        schema:
+          type: string
+    get:
+      summary: GET stats
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      bookmarks:
+                        type: object
+                        properties:
+                          count:
+                            type: number
+                          stats:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                percent:
+                                  type: number
+                                value:
+                                  type: number
+                                label:
+                                  type: string
+                                meta:
+                                  type: object
+                                  properties:
+                                    id:
+                                      type: number
+                                    color:
+                                      type: string
+                      rating:
+                        type: object
+                        properties:
+                          count:
+                            type: number
+                          stats:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                label:
+                                  type: number
+                                value:
+                                  type: number
+                                percent:
+                                  type: number
+                                meta:
+                                  type: object
+                                  properties:
+                                    id:
+                                      type: number
+      parameters:
+      - name: bookmarks
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: rating
+        in: query
+        required: false
+        schema:
+          type: string
+  /episodes:
+    options:
+      summary: OPTIONS episodes
+      responses:
+        '200':
+          description: OK
+          content: {}
+      parameters:
+      - name: anime_id
+        in: query
+        required: false
+        schema:
+          type: string
+    get:
+      summary: GET episodes
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        model:
+                          type: string
+                        name:
+                          type: string
+                        number:
+                          type: string
+                        number_secondary:
+                          type: string
+                        season:
+                          type: string
+                        status:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            label:
+                              type: string
+                            abbr:
+                              type: object
+                              nullable: true
+                        anime_id:
+                          type: number
+                        created_at:
+                          type: string
+                        item_number:
+                          type: number
+                        type:
+                          type: string
+      parameters:
+      - name: anime_id
+        in: query
+        required: false
+        schema:
+          type: string
+  /episodes/{id}:
+    options:
+      summary: OPTIONS episodes by id
+      responses:
+        '200':
+          description: OK
+          content: {}
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: GET episodes by id
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      model:
+                        type: string
+                      name:
+                        type: string
+                      number:
+                        type: string
+                      number_secondary:
+                        type: string
+                      season:
+                        type: string
+                      status:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          label:
+                            type: string
+                          abbr:
+                            type: object
+                            nullable: true
+                      anime_id:
+                        type: number
+                      created_at:
+                        type: string
+                      players:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                            episode_id:
+                              type: number
+                            player:
+                              type: string
+                            translation_type:
+                              type: object
+                              properties:
+                                id:
+                                  type: number
+                                label:
+                                  type: string
+                            team:
+                              type: object
+                              properties:
+                                id:
+                                  type: number
+                                slug:
+                                  type: string
+                                slug_url:
+                                  type: string
+                                model:
+                                  type: string
+                                name:
+                                  type: string
+                                cover:
+                                  type: object
+                                  properties:
+                                    filename:
+                                      type: object
+                                      nullable: true
+                                    thumbnail:
+                                      type: string
+                                    default:
+                                      type: string
+                                    md:
+                                      type: string
+                                stats:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      value:
+                                        type: number
+                                      formated:
+                                        type: string
+                                      short:
+                                        type: string
+                                      label:
+                                        type: string
+                                      tag:
+                                        type: string
+                            created_at:
+                              type: string
+                            views:
+                              type: number
+                            src:
+                              type: string
+                      type:
+                        type: string
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+  /anime/22105--akuyaku-reijou-level-99-watashi-wa-ura-boss-desu-ga-maou-dewa-arimasen-anime:
+    options:
+      summary: OPTIONS 
+        22105--akuyaku-reijou-level-99-watashi-wa-ura-boss-desu-ga-maou-dewa-arimasen-anime
+      responses:
+        '200':
+          description: OK
+          content: {}
+      parameters:
+      - name: fields[]
+        in: query
+        required: false
+        schema:
+          type: string
+    get:
+      summary: GET 
+        22105--akuyaku-reijou-level-99-watashi-wa-ura-boss-desu-ga-maou-dewa-arimasen-anime
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      name:
+                        type: string
+                      rus_name:
+                        type: string
+                      eng_name:
+                        type: string
+                      model:
+                        type: string
+                      slug:
+                        type: string
+                      slug_url:
+                        type: string
+                      cover:
+                        type: object
+                        properties:
+                          filename:
+                            type: string
+                          thumbnail:
+                            type: string
+                          default:
+                            type: string
+                          md:
+                            type: string
+                      ageRestriction:
+                        type: object
+                        properties:
+                          id:
+                            type: number
+                          label:
+                            type: string
+                      site:
+                        type: number
+                      type:
+                        type: object
+                        properties:
+                          id:
+                            type: number
+                          label:
+                            type: string
+                      summary:
+                        type: string
+                      releaseDate:
+                        type: string
+                      is_licensed:
+                        type: boolean
+                      genres:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                            name:
+                              type: string
+                            adult:
+                              type: boolean
+                            alert:
+                              type: boolean
+                      tags:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                            name:
+                              type: string
+                            adult:
+                              type: boolean
+                            alert:
+                              type: boolean
+                      status:
+                        type: object
+                        properties:
+                          id:
+                            type: number
+                          label:
+                            type: string
+                      time:
+                        type: object
+                        properties:
+                          value:
+                            type: number
+                          formated:
+                            type: string
+                      items_count:
+                        type: object
+                        properties:
+                          uploaded:
+                            type: number
+                          total:
+                            type: number
+                      releaseDateString:
+                        type: string
+                      shikimori_href:
+                        type: string
+                      shiki_rate:
+                        type: number
+                  meta:
+                    type: object
+                    properties:
+                      country:
+                        type: string
+      parameters:
+      - name: fields[]
+        in: query
+        required: false
+        schema:
+          type: string
+  /anime/22105--akuyaku-reijou-level-99-watashi-wa-ura-boss-desu-ga-maou-dewa-arimasen-anime/relations:
+    options:
+      summary: OPTIONS relations
+      responses:
+        '200':
+          description: OK
+          content: {}
+    get:
+      summary: GET relations
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        order:
+                          type: number
+                        related_type:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                            label:
+                              type: string
+                        media:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                            name:
+                              type: string
+                            rus_name:
+                              type: string
+                            eng_name:
+                              type: string
+                            model:
+                              type: string
+                            slug:
+                              type: string
+                            slug_url:
+                              type: string
+                            cover:
+                              type: object
+                              properties:
+                                filename:
+                                  type: string
+                                thumbnail:
+                                  type: string
+                                default:
+                                  type: string
+                                md:
+                                  type: string
+                            ageRestriction:
+                              type: object
+                              properties:
+                                id:
+                                  type: number
+                                label:
+                                  type: string
+                            site:
+                              type: number
+                            type:
+                              type: object
+                              properties:
+                                id:
+                                  type: number
+                                label:
+                                  type: string
+                            status:
+                              type: object
+                              properties:
+                                id:
+                                  type: number
+                                label:
+                                  type: string
+                            releaseDateString:
+                              type: string
+x-path-templates:
+# Remove the ignore: prefix to generate an endpoint with its URL
+# Lines that are closer to the top take precedence, the matching is greedy
+- ignore:/constants
+- ignore:/
+- ignore:/anime/14773--otome-game-no-hametsu-flag-shika-nai-akuyaku-reijou-ni-tensei-shiteshimatta-anime
+- ignore:/anime/14773--otome-game-no-hametsu-flag-shika-nai-akuyaku-reijou-ni-tensei-shiteshimatta-anime/relations
+- ignore:/anime/14773--otome-game-no-hametsu-flag-shika-nai-akuyaku-reijou-ni-tensei-shiteshimatta-anime/similar
+- ignore:/anime/14773--otome-game-no-hametsu-flag-shika-nai-akuyaku-reijou-ni-tensei-shiteshimatta-anime/stats
+- ignore:/anime/16026--majo-no-tabitabi-anime
+- ignore:/anime/16133--jujutsu-kaisen-anime
+- ignore:/anime/16133--jujutsu-kaisen-anime/relations
+- ignore:/anime/16133--jujutsu-kaisen-anime/similar
+- ignore:/anime/16133--jujutsu-kaisen-anime/stats
+- ignore:/anime/16775--otome-game-no-hametsu-flag-shika-nai-akuyaku-reijou-ni-tensei-shiteshimatta-x-anime
+- ignore:/anime/17984--chainsaw-man-anime
+- ignore:/anime/19143--otome-game-no-hametsu-flag-shika-nai-akuyaku-reijou-ni-tensei-shiteshimatta-ova-anime
+- ignore:/anime/19143--otome-game-no-hametsu-flag-shika-nai-akuyaku-reijou-ni-tensei-shiteshimatta-ova-anime/relations
+- ignore:/anime/19143--otome-game-no-hametsu-flag-shika-nai-akuyaku-reijou-ni-tensei-shiteshimatta-ova-anime/similar
+- ignore:/anime/19143--otome-game-no-hametsu-flag-shika-nai-akuyaku-reijou-ni-tensei-shiteshimatta-ova-anime/stats
+- ignore:/anime/19287--otome-game-no-hametsu-flag-shika-nai-akuyaku-reijou-ni-tensei-shiteshimatta-movie-anime
+- ignore:/anime/19287--otome-game-no-hametsu-flag-shika-nai-akuyaku-reijou-ni-tensei-shiteshimatta-movie-anime/relations
+- ignore:/anime/19287--otome-game-no-hametsu-flag-shika-nai-akuyaku-reijou-ni-tensei-shiteshimatta-movie-anime/similar
+- ignore:/anime/19287--otome-game-no-hametsu-flag-shika-nai-akuyaku-reijou-ni-tensei-shiteshimatta-movie-anime/stats
+- ignore:/anime/19355--akuyaku-reijou-nanode-last-boss-wo-kattemimashita-anime
+- ignore:/anime/19355--akuyaku-reijou-nanode-last-boss-wo-kattemimashita-anime/relations
+- ignore:/anime/19355--akuyaku-reijou-nanode-last-boss-wo-kattemimashita-anime/similar
+- ignore:/anime/19355--akuyaku-reijou-nanode-last-boss-wo-kattemimashita-anime/stats
+- ignore:/anime/19684--tsundere-akuyaku-reijou-liselotte-to-jikkyou-no-endou-kun-to-kaisetsu-no-kobayashi-san-anime
+- ignore:/anime/19684--tsundere-akuyaku-reijou-liselotte-to-jikkyou-no-endou-kun-to-kaisetsu-no-kobayashi-san-anime/relations
+- ignore:/anime/19684--tsundere-akuyaku-reijou-liselotte-to-jikkyou-no-endou-kun-to-kaisetsu-no-kobayashi-san-anime/similar
+- ignore:/anime/19684--tsundere-akuyaku-reijou-liselotte-to-jikkyou-no-endou-kun-to-kaisetsu-no-kobayashi-san-anime/stats
+- ignore:/anime/22061--kusuriya-no-hitorigoto-anime
+- ignore:/anime/22066--kyuujitsu-no-warumono-san-anime
+- ignore:/anime/22105--akuyaku-reijou-level-99-watashi-wa-ura-boss-desu-ga-maou-dewa-arimasen-anime/similar
+- ignore:/anime/22105--akuyaku-reijou-level-99-watashi-wa-ura-boss-desu-ga-maou-dewa-arimasen-anime/stats
+- ignore:/anime/22847--rekishi-ni-nokoru-akujo-ni-naru-zo-anime
+- ignore:/anime/22847--rekishi-ni-nokoru-akujo-ni-naru-zo-anime/relations
+- ignore:/anime/22847--rekishi-ni-nokoru-akujo-ni-naru-zo-anime/similar
+- ignore:/anime/22847--rekishi-ni-nokoru-akujo-ni-naru-zo-anime/stats
+- ignore:/anime/22857--loop-7-kaime-no-akuyaku-reijou-wa-moto-tekikoku-de-jiyuu-kimama-na-hanayome-seikatsu-wo-mankitsu-suru-anime
+- ignore:/anime/22857--loop-7-kaime-no-akuyaku-reijou-wa-moto-tekikoku-de-jiyuu-kimama-na-hanayome-seikatsu-wo-mankitsu-suru-anime/relations
+- ignore:/anime/22857--loop-7-kaime-no-akuyaku-reijou-wa-moto-tekikoku-de-jiyuu-kimama-na-hanayome-seikatsu-wo-mankitsu-suru-anime/similar
+- ignore:/anime/22857--loop-7-kaime-no-akuyaku-reijou-wa-moto-tekikoku-de-jiyuu-kimama-na-hanayome-seikatsu-wo-mankitsu-suru-anime/stats
+- ignore:/anime/23447--fanpai-chushihua-anime
+- ignore:/character
+- ignore:/comments
+- ignore:/comments/sticky
+- /episodes/106223
+- /episodes/116938
+- /episodes/116977
+- /episodes/119483
+- ignore:/episodes/122725
+- ignore:/episodes/40951
+- ignore:/episodes/40963
+- ignore:/episodes/41924
+- ignore:/episodes/56259
+- ignore:/episodes/9920
+- ignore:/episodes/9921
+- ignore:/episodes/9922
+- ignore:/episodes/9923
+- ignore:/episodes/9924
+- ignore:/episodes/9925
+- ignore:/episodes/9926
+- ignore:/episodes/9927

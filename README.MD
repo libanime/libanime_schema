@@ -4,6 +4,7 @@
 
 - src - конфигурации парсеров для источников
 - player - конфигурации парсеров для плееров
+- apis - swagger спецификация (сгенерированная при помощи [mitmproxy2swagger](https://github.com/MrTheFall/mitmproxy2swagger))
 
 ## Usage
 
