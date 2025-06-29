@@ -1,14 +1,13 @@
 from ssc_codegen import ItemSchema, D, ListSchema
-import re
 
-FMT_URL = 'https://yummy-anime.org{{}}'
+FMT_URL = 'https://yummyanime.in{{}}'
 
 class OngoingPage(ListSchema):
     """Get all available ongoings from the main page
 
     USAGE:
 
-        GET https://yummy-anime.org/
+        GET https://yummyanime.in/
 
     """
     __SPLIT_DOC__ = D().css_all('.ksupdate_block a')
@@ -25,12 +24,12 @@ class SearchPage(ListSchema):
 
     USAGE:
 
-        POST https://yummy-anime.org
+        POST https://yummyanime.in
         do=search&subaction=search&story=<QUERY>
 
     EXAMPLE:
 
-        POST https://yummy-anime.org/index.php
+        POST https://yummyanime.in/index.php
         do=search&subaction=search=from_page=0story=ван-пис
     """
 
@@ -46,11 +45,11 @@ class AnimePage(ItemSchema):
 
     USAGE:
 
-        GET https://yummy-anime.org/<...>.html
+        GET https://yummyanime.in/<...>.html
 
     EXAMPLE:
 
-        GET https://yummy-anime.org/4790-vedma-i-chudovische.html
+        GET https://yummyanime.in/4790-vedma-i-chudovische.html
 
     """
 
